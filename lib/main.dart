@@ -2,15 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:sport60/views/home.dart';
 import 'package:sport60/views/history/history_list.dart';
 import 'package:sport60/views/planned/planned_list.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-void main() {
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings('@mipmap/ic_launcher'); // Utilise ton icône
+
+  const InitializationSettings initializationSettings =
+  InitializationSettings(android: initializationSettingsAndroid);
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -45,6 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sport60'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: _showNotification, // Ajout du bouton pour déclencher une notification
+          ),
+        ],
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -65,6 +85,40 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
+    );
+  }
+
+  Future<void> _requestNotificationPermission() async {
+    if (await Permission.notification.isDenied) {
+      await Permission.notification.request();
+    }
+  }
+
+  // Fonction pour afficher une notification (POC)
+  // Appelle cette fonction avant d'envoyer la notification
+  Future<void> _showNotification() async {
+    // Demander la permission avant d'envoyer la notification
+    await _requestNotificationPermission();
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'basic_channel', // Identifiant du canal
+      'Basic Notifications', // Nom du canal
+      channelDescription: 'Channel for basic notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: true,
+    );
+
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'POC Notification',
+      'Ceci est une notification de test',
+      platformChannelSpecifics,
+      payload: 'test_payload',
     );
   }
 }
