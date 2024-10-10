@@ -3,6 +3,7 @@ import 'package:sport60/views/History/history_list.dart';
 import 'package:sport60/widgets/button.dart';
 import 'package:sport60/widgets/stopwatch.dart';
 import 'package:sport60/widgets/timer.dart';
+import 'package:sport60/widgets/comment.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -44,6 +45,13 @@ class _HomePageState extends State<HomePage> {
             maxTime: 10,
             onTimeUp: () {
               print('Time is up!');
+            },
+          ),
+          CommentWidget(
+            onPost: (comment) async {
+              // Handle the comment posting logic here
+              print('Comment posted: $comment');
+              // Add any API call or post functionality
             },
           ),
         ]));
