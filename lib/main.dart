@@ -2,22 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sport60/views/home.dart';
 import 'package:sport60/views/history/history_list.dart';
 import 'package:sport60/views/planned/planned_list.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+import 'package:sport60/widgets/notification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher'); // Utilise ton icône
-
-  const InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid);
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   runApp(const MyApp());
 }
@@ -62,7 +50,15 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
-            onPressed: _showNotification, // Ajout du bouton pour déclencher une notification
+            onPressed: () {
+              _showNotificationWithDelay(context);  // Appeler la fonction de notification avec un délai
+            }, // Utiliser le widget pour afficher une notification
+          ),
+          IconButton(
+            icon: const Icon(Icons.add_alert),
+            onPressed: () {
+              _showNotification(context);  // Appeler la fonction de notification avec un délai
+            }, // Utiliser le widget pour afficher une notification
           ),
         ],
       ),
@@ -88,22 +84,41 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _requestNotificationPermission() async {
-    if (await Permission.notification.isDenied) {
-      await Permission.notification.request();
-    }
+  // Afficher un SnackBar et déclencher la notification après un délai
+  void _showNotificationWithDelay(BuildContext context) {
+    // Afficher un SnackBar pour informer l'utilisateur
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Une notification apparaîtra dans 5 secondes.'),
+      ),
+    );
+
+    // Appeler le service de notification après 5 secondes
+    NotificationService().showNotification(
+      title: 'POC Notification avec time',
+      body: 'Ceci est personnalisée.',
+      delayInSeconds: 3,
+    );
+  }
+  // Déclencher la notification direct
+  void _showNotification(BuildContext context) {
+    // Appeler le service de notification après 5 secondes
+    NotificationService().showNotification(
+      title: 'POC Notification',
+      body: 'Ceci est une notification personnalisée sans time.',
+      delayInSeconds: 0,
+    );
   }
 
-  // Fonction pour afficher une notification (POC)
-  // Appelle cette fonction avant d'envoyer la notification
+  /*// Function show notif (POC)
   Future<void> _showNotification() async {
-    // Demander la permission avant d'envoyer la notification
+    // Ask permission before send notif
     await _requestNotificationPermission();
 
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
-      'basic_channel', // Identifiant du canal
-      'Basic Notifications', // Nom du canal
+      'basic_channel', // CanalID
+      'Basic Notifications', // Canal name
       channelDescription: 'Channel for basic notifications',
       importance: Importance.max,
       priority: Priority.high,
@@ -120,5 +135,5 @@ class _HomeScreenState extends State<HomeScreen> {
       platformChannelSpecifics,
       payload: 'test_payload',
     );
-  }
+  }*/
 }
