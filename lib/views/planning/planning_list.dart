@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class PlannedList extends StatefulWidget {
-  const PlannedList({super.key});
+class PlanningList extends StatefulWidget {
+  const PlanningList({super.key});
   @override
-  State<PlannedList> createState() => _PlannedListState();
+  State<PlanningList> createState() => _PlanningListState();
 }
 
-class _PlannedListState extends State<PlannedList> {
+class _PlanningListState extends State<PlanningList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

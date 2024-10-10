@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sport60/views/home.dart';
 import 'package:sport60/views/history/history_list.dart';
-import 'package:sport60/views/planned/planned_list.dart';
+import 'package:sport60/views/planning/planning_list.dart';
 import 'package:sport60/widgets/notification.dart';
 
 void main() async {
@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     const HistoryList(),
     const HomePage(),
-    const PlannedList(),
+    const PlanningList(),
   ];
 
   void _onItemTapped(int index) {
