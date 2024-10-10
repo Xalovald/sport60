@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sport60/views/history/history_list.dart';
+import 'package:sport60/views/History/history_list.dart';
 import 'package:sport60/widgets/button.dart';
+import 'package:sport60/widgets/stopwatch.dart';
+import 'package:sport60/widgets/timer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,8 +37,15 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.black,
               ),
             ),
-            heroTag: 'historyButton',
-          )
+            heroTag: 'startSessionButton',
+          ),
+          StopwatchWidget(),
+          CountdownTimer(
+            maxTime: 10,
+            onTimeUp: () {
+              print('Time is up!');
+            },
+          ),
         ]));
   }
 }
