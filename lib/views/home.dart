@@ -22,17 +22,18 @@ class _HomePageState extends State<HomePage> {
           CustomButton(
             onClick: () => {
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => HistoryList()))
+                  .push(MaterialPageRoute(builder: (context) => const ChooseSession()))
             },
             decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
-                color: Color.fromARGB(255, 224, 176, 255),
+                color: const Color.fromARGB(255, 224, 176, 255),
                 border: Border.all(width: 2)),
             width: MediaQuery.of(context).size.width * 0.8,
             height: 50,
+            heroTag: 'ChooseSessionButton',
             child: const Text(
-              "Aller à l'historique",
+              "Planifier une séance",
               style: TextStyle(
                 color: Colors.black,
               ),
