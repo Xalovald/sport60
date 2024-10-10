@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sport60/widgets/home.dart';
-import 'package:sport60/widgets/history_list.dart';
-import 'package:sport60/widgets/planned_list.dart';
+import 'package:sport60/views/home.dart';
+import 'package:sport60/views/history/history_list.dart';
+import 'package:sport60/views/planned/planned_list.dart';
 
 void main() {
   runApp(const MyApp());
