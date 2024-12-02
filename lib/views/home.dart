@@ -22,8 +22,8 @@ class _HomePageState extends State<HomePage> {
           const Text("Home"),
           CustomButton(
             onClick: () => {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const ChooseSession()))
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ChooseSession()))
             },
             decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
@@ -47,6 +47,10 @@ class _HomePageState extends State<HomePage> {
               print('Temps écoulé!');
             },
           ),
+          SoundWidget(
+              assetPath: "sounds/royal.mp3",
+              duration: Duration(seconds: 15),
+              schedule: Duration(seconds: 0))
         ]));
   }
 }

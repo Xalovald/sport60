@@ -5,8 +5,13 @@ import 'dart:async';
 class SoundWidget extends StatefulWidget {
   final String assetPath;
   final Duration duration;
+  final Duration schedule;
 
-  SoundWidget({required this.assetPath, required this.duration});
+  SoundWidget({
+    required this.assetPath,
+    required this.duration,
+    required this.schedule,
+  });
 
   @override
   _SoundWidgetState createState() => _SoundWidgetState();
@@ -34,7 +39,14 @@ class _SoundWidgetState extends State<SoundWidget> {
   @override
   void initState() {
     super.initState();
-    _playSound();
+    scheduleSound(widget.schedule);
+  }
+
+  void scheduleSound(Duration delay) {
+    _timer?.cancel(); // Annule tout timer existant
+    _timer = Timer(delay, () {
+      _playSound();
+    });
   }
 
   void _playSound() async {
