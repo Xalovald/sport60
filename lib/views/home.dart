@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           CountdownTimer(
             maxTime: 10,
             onTimeUp: () {
-              print('Time is up!');
+              print('Temps écoulé!');
             },
           ),
         ]));
