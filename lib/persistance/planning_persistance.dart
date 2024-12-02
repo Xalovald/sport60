@@ -9,9 +9,21 @@ class PlanningPersistance {
     return await db.insert('planning', plannification.toMap());
   }
 
-  Future<List<PlanningDomain>> getPlanning() async {
+  // Future<List<PlanningDomain>> getPlanning() async {
+  //   final db = await _dbHelper.database;
+  //   final List<Map<String, dynamic>> maps = await db.query('planning');
+  //   return List.generate(maps.length, (i) {
+  //     return PlanningDomain.fromMap(maps[i]);
+  //   });
+  // }
+
+  Future<List<PlanningDomain>> getPlannings() async {
     final db = await _dbHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('planning');
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
+      SELECT planning.*, session.name as session_name
+      FROM planning
+      INNER JOIN session ON planning.session_id = session.id
+    ''');
     return List.generate(maps.length, (i) {
       return PlanningDomain.fromMap(maps[i]);
     });

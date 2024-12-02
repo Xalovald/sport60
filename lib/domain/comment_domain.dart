@@ -1,19 +1,18 @@
 class CommentDomain {
   final int? id;
-  final int sessionId;
+  final int? sessionId;
   final int? exerciseId;
   final String comment;
   final bool isGlobal;
 
   CommentDomain({
     this.id,
-    required this.sessionId,
+    this.sessionId,
     this.exerciseId,
     required this.comment,
     required this.isGlobal,
   });
 
-  // Convertir un objet Comment en Map
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -24,7 +23,6 @@ class CommentDomain {
     };
   }
 
-  // Convertir un Map en objet Comment
   factory CommentDomain.fromMap(Map<String, dynamic> map) {
     return CommentDomain(
       id: map['id'],

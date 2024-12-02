@@ -1,9 +1,9 @@
-class ExerciseDomain {
+class SessionTypeDomain {
   final int? id;
   final String name;
   final String? description;
 
-  ExerciseDomain({
+  SessionTypeDomain({
     this.id,
     required this.name,
     this.description,
@@ -17,8 +17,8 @@ class ExerciseDomain {
     };
   }
 
-  factory ExerciseDomain.fromMap(Map<String, dynamic> map) {
-    return ExerciseDomain(
+  factory SessionTypeDomain.fromMap(Map<String, dynamic> map) {
+    return SessionTypeDomain(
       id: map['id'],
       name: map['name'],
       description: map['description'],

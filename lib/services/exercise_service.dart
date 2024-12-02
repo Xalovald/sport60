@@ -12,8 +12,8 @@ class ExerciseService {
     return await _exercisePersistance.getExercises();
   }
 
-  Future<List<ExerciseDomain>> getExercisesBySessionId(int exerciseId) async {
-    return await _exercisePersistance.getExercisesBySessionId(exerciseId);
+  Future<ExerciseDomain> getExerciseById(int exerciseId) async {
+    return await _exercisePersistance.getExerciseById(exerciseId);
   }
 
   Future<int> deleteExercise(int exerciseId) async {

@@ -8,8 +8,8 @@ class PlanningService {
     return await _planningPersistance.insertPlanning(planning);
   }
 
-  Future<List<PlanningDomain>> getPlanning() async {
-    return await _planningPersistance.getPlanning();
+  Future<List<PlanningDomain>> getPlannings() async {
+    return await _planningPersistance.getPlannings();
   }
 
   Future<int> deletePlanning(int planningId) async {
