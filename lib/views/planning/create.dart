@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sport60/services/exercise_service.dart';
+import 'package:sport60/services/session_exercise_service.dart';
 import 'package:sport60/domain/session_domain.dart';
-import 'package:sport60/domain/exercise_domain.dart';
+import 'package:sport60/domain/session_exercise_domain.dart';
 
 class PlanningCreate extends StatefulWidget {
   final SessionDomain session;
@@ -13,20 +13,20 @@ class PlanningCreate extends StatefulWidget {
 }
 
 class _PlanningCreateState extends State<PlanningCreate> {
-  final ExerciseService _exerciseService = ExerciseService();
-  List<ExerciseDomain> _exercises = [];
+  final SessionExerciseService _sessionExerciseService = SessionExerciseService();
+  List<SessionExerciseDomain> _sessionExercises = [];
 
   @override
   void initState() {
     super.initState();
-    _loadExercises();
+    _loadSessionExercises();
   }
 
   // Récupérer les exercices de la séance sélectionnée
-  Future<void> _loadExercises() async {
-    List<ExerciseDomain> exercises = await _exerciseService.getExercisesBySessionId(widget.session.id!);
+  Future<void> _loadSessionExercises() async {
+    List<SessionExerciseDomain> sessionExercises = await _sessionExerciseService.getSessionExercisesBySessionId(widget.session.id!);
     setState(() {
-      _exercises = exercises;
+      _sessionExercises = sessionExercises;
     });
   }
 
@@ -47,7 +47,7 @@ class _PlanningCreateState extends State<PlanningCreate> {
             ),
             const SizedBox(height: 10),
             Text(
-              "Durée: ${widget.session.totalDuration} minutes",
+              "Durée: ${widget.session.totalDuration} secondes",
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
@@ -57,16 +57,16 @@ class _PlanningCreateState extends State<PlanningCreate> {
             ),
             const SizedBox(height: 10),
             // Afficher la liste des exercices
-            _exercises.isEmpty
+            _sessionExercises.isEmpty
                 ? const Text("Aucun exercice disponible.")
                 : ListView.builder(
                     shrinkWrap: true,
-                    itemCount: _exercises.length,
+                    itemCount: _sessionExercises.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        title: Text(_exercises[index].name),
+                        title: Text(_sessionExercises[index].exerciseName!),
                         subtitle: Text(
-                            "Répétitions: ${_exercises[index].repetitions}, Durée: ${_exercises[index].duration} minutes"),
+                            "Répétitions: ${_sessionExercises[index].repetitions}, Durée: ${_sessionExercises[index].duration} secondes, nb séries: ${_sessionExercises[index].series}, pause exercice: ${_sessionExercises[index].exercisePauseTime} secondes, pause série: ${_sessionExercises[index].seriePauseTime} secondes"),
                       );
                     },
                   ),

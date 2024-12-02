@@ -2,16 +2,15 @@ class PlanningDomain {
   final int? id;
   final int sessionId;
   final String date;
-  final String time;
+  final String? time;
 
   PlanningDomain({
     this.id,
     required this.sessionId,
     required this.date,
-    required this.time,
+    this.time,
   });
 
-  // Convertir un objet Plannification en Map
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -21,7 +20,6 @@ class PlanningDomain {
     };
   }
 
-  // Convertir un Map en objet Plannification
   factory PlanningDomain.fromMap(Map<String, dynamic> map) {
     return PlanningDomain(
       id: map['id'],
