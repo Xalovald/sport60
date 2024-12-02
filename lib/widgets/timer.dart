@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'dart:async'; // Import the Timer class
+import "dart:async";
 
 class CountdownTimer extends StatefulWidget {
   final int maxTime;
@@ -42,13 +42,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
   }
 
   void _playSound() async {
-    try {
-      print('Trying to play sound...');
-      await _audioPlayer.play(AssetSource('sounds/time_up.mp3'));
-      print('Sound played successfully.');
-    } catch (e) {
-      print('Error playing sound: $e');
-    }
+    await _audioPlayer.play(AssetSource('sounds/time_up.mp3'));
   }
 
   @override
