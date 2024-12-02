@@ -23,6 +23,7 @@ class _CreateSessionState extends State<CreateSession> {
 
   String? _sessionName;
   int? _sessionTypeId;
+  int? _totalDuration;
   int? _selectedExerciseId;
   int _exerciseDuration = 0;
   int _exerciseRepetitions = 0;
@@ -62,7 +63,8 @@ class _CreateSessionState extends State<CreateSession> {
       final session = SessionDomain(
         name: _sessionName!,
         sessionTypeId: _sessionTypeId!,
-        totalDuration: _sessionExercises.fold<int>(0, (sum, exercise) => sum + (exercise.duration ?? 0 * exercise.series),),
+        totalDuration: _totalDuration ?? 0,
+        //totalDuration: _sessionExercises.fold<int>(0, (sum, exercise) => sum + (exercise.duration ?? 0 * exercise.series),),
         pauseDuration: 0,
       );
       final sessionId = await _sessionService.addSession(session);
@@ -250,6 +252,17 @@ class _CreateSessionState extends State<CreateSession> {
                   },
                 ),
 
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Total duration (s)'),
+                  keyboardType: TextInputType.number,
+                  enabled: _sessionTypeId == 1, 
+                  onChanged: (value) {
+                    setState(() {
+                      _totalDuration = int.tryParse(value) ?? 0;
+                    });
+                  },
+                ),
+
                 SizedBox(height: 70),
 
                 // Ajouter un nouvel exercice via le bouton
@@ -284,28 +297,51 @@ class _CreateSessionState extends State<CreateSession> {
                   },
                 ),
 
-                // Exercise properties
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Duration (s)'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      _exerciseDuration = int.tryParse(value) ?? 0;
-                    });
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center, // Centrer les éléments
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(labelText: 'Duration (s)'),
+                        keyboardType: TextInputType.number,
+                        enabled: _exerciseRepetitions == 0 && _sessionTypeId == 2, // Désactivé si des répétitions sont définies
+                        onChanged: (value) {
+                          setState(() {
+                            _exerciseDuration = int.tryParse(value) ?? 0;
+                            if (_exerciseDuration > 0) {
+                              _exerciseRepetitions = 0; // Réinitialise les répétitions
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text('ou'),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(labelText: 'Repetitions'),
+                        keyboardType: TextInputType.number,
+                        enabled: _exerciseDuration == 0, // Désactivé si la durée est définie
+                        onChanged: (value) {
+                          setState(() {
+                            _exerciseRepetitions = int.tryParse(value) ?? 0;
+                            if (_exerciseRepetitions > 0) {
+                              _exerciseDuration = 0; // Réinitialise la durée
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Repetitions'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      _exerciseRepetitions = int.tryParse(value) ?? 0;
-                    });
-                  },
-                ),
+
+
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Series'),
                   keyboardType: TextInputType.number,
+                  enabled: _sessionTypeId != 1,
                   onChanged: (value) {
                     setState(() {
                       _exerciseSeries = int.tryParse(value) ?? 1;
@@ -315,6 +351,7 @@ class _CreateSessionState extends State<CreateSession> {
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Pause entre exercice'),
                   keyboardType: TextInputType.number,
+                  enabled: _sessionTypeId == 2,
                   onChanged: (value) {
                     setState(() {
                       _exercisePauseTime = int.tryParse(value) ?? 0;
@@ -324,6 +361,7 @@ class _CreateSessionState extends State<CreateSession> {
                 TextFormField(
                   decoration: InputDecoration(labelText: 'pause entre série'),
                   keyboardType: TextInputType.number,
+                  enabled: _sessionTypeId != 1,
                   onChanged: (value) {
                     setState(() {
                       _exerciseSeriePauseTime = int.tryParse(value) ?? 0;

@@ -25,30 +25,30 @@ class SessionExercisePersistance {
   // }
 
   Future<List<SessionExerciseDomain>> getSessionExercisesBySessionId(int sessionId) async {
-  final db = await _dbHelper.database;
+    final db = await _dbHelper.database;
 
-  // Jointure entre session_exercise et exercise
-  final List<Map<String, dynamic>> maps = await db.rawQuery('''
-    SELECT session_exercise.*, exercise.name AS exercise_name, exercise.description AS exercise_description
-    FROM session_exercise
-    INNER JOIN exercise ON session_exercise.exercise_id = exercise.id
-    WHERE session_exercise.session_id = ?
-  ''', [sessionId]);
+    // Jointure entre session_exercise et exercise
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
+      SELECT session_exercise.*, exercise.name AS exercise_name, exercise.description AS exercise_description
+      FROM session_exercise
+      INNER JOIN exercise ON session_exercise.exercise_id = exercise.id
+      WHERE session_exercise.session_id = ?
+    ''', [sessionId]);
 
-  // Génération des objets en incluant les données d'exercice
-  return List.generate(maps.length, (i) {
-    return SessionExerciseDomain(
-      id: maps[i]['id'],
-      sessionId: maps[i]['session_id'],
-      exerciseId: maps[i]['exercise_id'],
-      duration: maps[i]['duration'],
-      repetitions: maps[i]['repetitions'],
-      series: maps[i]['series'],
-      exerciseName: maps[i]['exercise_name'],
-      exerciseDescription: maps[i]['exercise_description'],
-    );
-  });
-}
+    // Génération des objets en incluant les données d'exercice
+    return List.generate(maps.length, (i) {
+      return SessionExerciseDomain(
+        id: maps[i]['id'],
+        sessionId: maps[i]['session_id'],
+        exerciseId: maps[i]['exercise_id'],
+        duration: maps[i]['duration'],
+        repetitions: maps[i]['repetitions'],
+        series: maps[i]['series'],
+        exerciseName: maps[i]['exercise_name'],
+        exerciseDescription: maps[i]['exercise_description'],
+      );
+    });
+  }
 
   Future<int> deleteSessionExercise(int id) async {
     final db = await _dbHelper.database;
