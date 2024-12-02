@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "465782468893",
+    "project_id": "sport60-db9b8",
+    "storage_bucket": "sport60-db9b8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465782468893:android:c94b6bad4630ebe4e931f4",
+        "android_client_info": {
+          "package_name": "com.example.sport60"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "465782468893-8ue9i9l8gilrr6h2vml3e2254i54ibrl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBi2z0ucAfekNaBG8bAcn1qrGV1PSRwarI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "465782468893-8ue9i9l8gilrr6h2vml3e2254i54ibrl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "465782468893-1do2gr7tg0melh7u2vvjcmmq13rajruc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sport60"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465782468893:android:fbea31a90f767d89e931f4",
+        "android_client_info": {
+          "package_name": "com.exemple.sport60"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "465782468893-rrd69dibg9gfanbrvah9o6nfb337hdis.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.exemple.sport60",
+            "certificate_hash": "ad14bbc87b428c5db048625c9d0f113b61e50d6b"
+          }
+        },
+        {
+          "client_id": "465782468893-8ue9i9l8gilrr6h2vml3e2254i54ibrl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBi2z0ucAfekNaBG8bAcn1qrGV1PSRwarI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "465782468893-8ue9i9l8gilrr6h2vml3e2254i54ibrl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "465782468893-1do2gr7tg0melh7u2vvjcmmq13rajruc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sport60"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
