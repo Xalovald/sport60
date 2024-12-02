@@ -1,47 +1,54 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
+import "dart:async";
 
 class CountdownTimer extends StatefulWidget {
-  final int maxTime; // Time in seconds
-  final Function onTimeUp;
+  final int maxTime;
+  final VoidCallback onTimeUp;
 
-  CountdownTimer({required this.maxTime, required this.onTimeUp, Key? key})
-      : super(key: key);
+  CountdownTimer({required this.maxTime, required this.onTimeUp});
 
   @override
   _CountdownTimerState createState() => _CountdownTimerState();
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
-  late int remainingTime;
-  Timer? timer;
-  bool isStarted = false; // Track whether the timer has started
+  int _remainingTime = 0;
+  bool _isStarted = false;
+  late Timer _timer;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
-    remainingTime = widget.maxTime;
+    _remainingTime = widget.maxTime;
   }
 
   void startTimer() {
     setState(() {
-      isStarted = true; // Update state to indicate the timer has started
+      _isStarted = true;
     });
-    timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-      if (remainingTime > 0) {
-        setState(() {
-          remainingTime--;
-        });
-      } else {
-        timer.cancel();
-        widget.onTimeUp();
-      }
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+        } else {
+          _timer.cancel();
+          widget.onTimeUp();
+          _playSound();
+        }
+      });
     });
+  }
+
+  void _playSound() async {
+    await _audioPlayer.play(AssetSource('sounds/time_up.mp3'));
   }
 
   @override
   void dispose() {
-    timer?.cancel();
+    _timer.cancel();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -51,15 +58,16 @@ class _CountdownTimerState extends State<CountdownTimer> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Time remaining: $remainingTime seconds',
+          _remainingTime > 0
+              ? 'Temps restant: $_remainingTime secondes'
+              : 'Temps écoulé!',
           style: TextStyle(fontSize: 24),
         ),
         SizedBox(height: 20),
-        // Show the button only if the timer hasn't started yet
-        if (!isStarted)
+        if (!_isStarted)
           ElevatedButton(
             onPressed: startTimer,
-            child: Text('Démarrer'), // Button to start the timer
+            child: Text('Démarrer'),
           ),
       ],
     );
