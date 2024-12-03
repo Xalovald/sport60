@@ -35,6 +35,8 @@ class SoundWidget extends StatefulWidget {
 class _SoundWidgetState extends State<SoundWidget> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   Timer? _timer;
+  bool _isPlaying =
+      false; // Variable pour suivre si une musique est en cours de lecture
 
   @override
   void initState() {
@@ -50,6 +52,13 @@ class _SoundWidgetState extends State<SoundWidget> {
   }
 
   void _playSound() async {
+    if (_isPlaying) {
+      print('Another sound is already playing.');
+      return; // Ignore la nouvelle demande de lecture si une musique est déjà en cours
+    }
+
+    _isPlaying = true; // Marque que la musique est en cours de lecture
+
     try {
       await _audioPlayer.play(AssetSource(widget.assetPath));
       print('Sound played successfully.');
@@ -57,9 +66,12 @@ class _SoundWidgetState extends State<SoundWidget> {
       _timer = Timer(widget.duration, () {
         _audioPlayer.stop();
         print('Sound stopped after duration.');
+        _isPlaying = false; // Marque que la musique a fini de jouer
       });
     } catch (e) {
       print('Error playing sound: $e');
+      _isPlaying =
+          false; // Marque que la musique a fini de jouer en cas d'erreur
     }
   }
 

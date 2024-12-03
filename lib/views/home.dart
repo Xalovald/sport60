@@ -46,11 +46,8 @@ class _HomePageState extends State<HomePage> {
             onTimeUp: () {
               print('Temps écoulé!');
             },
+            autoStart: false,
           ),
-          SoundWidget(
-              assetPath: "sounds/royal.mp3",
-              duration: Duration(seconds: 15),
-              schedule: Duration(seconds: 0))
         ]));
   }
 }
