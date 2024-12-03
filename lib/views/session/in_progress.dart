@@ -3,8 +3,11 @@ import 'package:sport60/services/session_exercise_service.dart';
 import 'package:sport60/services/session_service.dart';
 import 'package:sport60/domain/session_domain.dart';
 import 'package:sport60/domain/session_exercise_domain.dart';
+import 'package:sport60/services/planning_service.dart';
+import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/widgets/timer.dart';
 import 'package:sport60/widgets/stopwatch.dart';
+import 'package:sport60/views/dashboard/detail.dart';
 
 class InProgressSession extends StatefulWidget {
   final int sessionId;
@@ -21,6 +24,7 @@ class _InProgressSessionState extends State<InProgressSession> {
 
   final SessionService _sessionService = SessionService();
   final SessionExerciseService _sessionExerciseService = SessionExerciseService();
+  final PlanningService _planningService = PlanningService();
 
   SessionDomain? _session;
   List<SessionExerciseDomain> _sessionExercises = [];
@@ -28,6 +32,7 @@ class _InProgressSessionState extends State<InProgressSession> {
   int _currentSeries = 1;
   bool _isResting = false;
   bool _isSessionTerminate = false;
+  int _nbSeriesRealised = 0;
 
   bool _isStrarted = false;
 
@@ -88,6 +93,32 @@ class _InProgressSessionState extends State<InProgressSession> {
     }
   }
 
+  Future<void> _updateSession() async {
+    PlanningDomain planning = await _planningService.getPlanningBySessionId(widget.sessionId);
+    DateTime now = DateTime.now(); // Récupère la date et l'heure actuelles
+
+    planning.dateRealized = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    planning.timeRealized = "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
+
+    await _planningService.updatePlanning(planning);
+
+    if(_session!.sessionTypeId == 1){
+      for (var sessionExercise in _sessionExercises) {
+        sessionExercise.series = _nbSeriesRealised; 
+        await _sessionExerciseService.updateSessionExercise(sessionExercise);
+      }
+    }
+    else{
+      final session = SessionDomain(
+        id: _session!.id,
+        name: _session!.name,
+        sessionTypeId: _session!.sessionTypeId,
+        totalDuration: _totalDuration,
+        pauseDuration: 0,
+      );
+      await _sessionService.updateSession(session);
+    }
+  }
 
   void _showSessionCompleteDialog() {
     showDialog(
@@ -142,7 +173,37 @@ class _InProgressSessionState extends State<InProgressSession> {
     if (_isSessionTerminate) {
       return Scaffold(
         appBar: AppBar(title: const Text('Séance en cours')),
-        body: const Center(child: Text('Séance terminée')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Séance terminée'),
+              if(_session!.sessionTypeId == 1)
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Combien de série avez vous réalisé?'),
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    setState(() {
+                      _nbSeriesRealised = int.tryParse(value) ?? 1;
+                    });
+                  },
+                ),
+              ElevatedButton(
+                onPressed: () async {
+                  await _updateSession();
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailDashboard(sessionId: _session!.id!),
+                    ),
+                  );
+                },
+                child: const Text('Voir le récap'),
+              ),
+            ],
+          ),
+        ),
       );
     }
 
