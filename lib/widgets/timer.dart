@@ -17,7 +17,7 @@ class CountdownTimer extends StatefulWidget {
 class _CountdownTimerState extends State<CountdownTimer> {
   int _remainingTime = 0;
   bool _isStarted = false;
-  late Timer _timer;
+  Timer? _timer; // Changed from late Timer to Timer? and initialized with null
   final SoundWidget _soundWidget = SoundWidget(
     assetPath: 'sounds/time_up.mp3',
     duration: Duration(seconds: 14), // Durée maximale de lecture
@@ -42,7 +42,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
         if (_remainingTime > 0) {
           _remainingTime--;
         } else {
-          _timer.cancel();
+          _timer?.cancel();
           widget.onTimeUp();
           _playSound();
         }
@@ -59,7 +59,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 

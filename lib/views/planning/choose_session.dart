@@ -5,6 +5,8 @@ import 'package:sport60/views/planning/create.dart';
 import 'package:sport60/views/session/create.dart';
 import 'package:sport60/widgets/button.dart';
 import 'package:sport60/widgets/sound.dart';
+import 'package:sport60/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class ChooseSession extends StatefulWidget {
   const ChooseSession({super.key});
@@ -33,6 +35,7 @@ class _ChooseSessionState extends State<ChooseSession> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Choisir une séance"),
@@ -75,15 +78,15 @@ class _ChooseSessionState extends State<ChooseSession> {
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  color: const Color.fromARGB(255, 224, 176, 255),
+                  color: themeNotifier.buttonColor,
                   border: Border.all(width: 2)),
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               heroTag: 'CreateSession',
-              child: const Text(
+              child: Text(
                 "Ajouter une séance",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: themeNotifier.buttonTextColor,
                 ),
               ),
             )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sport60/firebase_options.dart';
 import 'package:sport60/views/home.dart';
 import 'package:sport60/views/history/history_list.dart';
@@ -8,13 +9,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sport60/views/auth/auth_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sport60/widgets/theme.dart'; // Import ThemeNotifier
+import 'package:flutter_colorpicker/flutter_colorpicker.dart'; // Import BlockPicker
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeNotifier(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,14 +30,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sport60',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: _getHomePage(),
-      routes: {
-        '/login': (context) => const AuthPage(),
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return MaterialApp(
+          title: 'Sport60',
+          theme: themeNotifier.currentTheme,
+          home: _getHomePage(),
+          routes: {
+            '/login': (context) => const AuthPage(),
+          },
+        );
       },
     );
   }
@@ -76,20 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sport60'),
-        /* actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              _showNotificationWithDelay(context);  // Appeler la fonction de notification avec un délai
-            }, // Utiliser le widget pour afficher une notification
-          ),
-          IconButton(
-            icon: const Icon(Icons.add_alert),
-            onPressed: () {
-              _showNotification(context);  // Appeler la fonction de notification avec un délai
-            }, // Utiliser le widget pour afficher une notification
-          ),
-        ], */
       ),
       drawer: Drawer(
         child: ListView(
@@ -97,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: ThemeNotifier.lightModeButtonColor,
               ),
               child: Text(
                 'Actions',
@@ -122,6 +118,49 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 Navigator.pop(context); // Close the drawer
                 _showNotification(context); // Call the notification function
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.sunny),
+              title: const Text('Light Theme'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                Provider.of<ThemeNotifier>(context, listen: false).setLightTheme();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.dark_mode),
+              title: const Text('Dark Theme'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                Provider.of<ThemeNotifier>(context, listen: false).setDarkTheme();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.palette),
+              title: const Text('Choose Custom Theme Color'),
+              onTap: () async {
+              Navigator.pop(context); // Close the drawer
+              Color? selectedColor = await showDialog(
+                context: context,
+                builder: (context) {
+                  Color pickerColor = ThemeNotifier.defaultThemeColor;
+                  return AlertDialog(
+                    title: const Text('Select Custom Theme Color'),
+                    content: SingleChildScrollView(
+                      child: BlockPicker(
+                        pickerColor: pickerColor,
+                        onColorChanged: (color) {
+                          Navigator.of(context).pop(color);
+                        },
+                      ),
+                    ),
+                  );
+                },
+              );
+              if (selectedColor != null) {
+                Provider.of<ThemeNotifier>(context, listen: false).setCustomTheme(selectedColor);
+              }
               },
             ),
             ListTile(
