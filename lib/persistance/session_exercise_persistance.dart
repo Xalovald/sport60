@@ -37,16 +37,7 @@ class SessionExercisePersistance {
 
     // Génération des objets en incluant les données d'exercice
     return List.generate(maps.length, (i) {
-      return SessionExerciseDomain(
-        id: maps[i]['id'],
-        sessionId: maps[i]['session_id'],
-        exerciseId: maps[i]['exercise_id'],
-        duration: maps[i]['duration'],
-        repetitions: maps[i]['repetitions'],
-        series: maps[i]['series'],
-        exerciseName: maps[i]['exercise_name'],
-        exerciseDescription: maps[i]['exercise_description'],
-      );
+      return SessionExerciseDomain.fromMap(maps[i]);
     });
   }
 

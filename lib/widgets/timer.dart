@@ -8,7 +8,7 @@ class CountdownTimer extends StatefulWidget {
   final bool autoStart;
 
   CountdownTimer(
-      {required this.maxTime, required this.onTimeUp, this.autoStart = false});
+      {required this.maxTime, required this.onTimeUp, this.autoStart = false, super.key});
 
   @override
   _CountdownTimerState createState() => _CountdownTimerState();

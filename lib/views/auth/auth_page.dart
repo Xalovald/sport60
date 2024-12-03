@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -40,6 +41,10 @@ class _AuthPageState extends State<AuthPage> {
             ElevatedButton(
               onPressed: _signUp,
               child: const Text('Sign Up'),
+            ),
+            ElevatedButton(
+              onPressed: _signInWithGoogle,
+              child: const Text('Sign In with Google'),
             ),
           ],
         ),
@@ -83,5 +88,31 @@ class _AuthPageState extends State<AuthPage> {
         SnackBar(content: Text('Failed to sign up: $e')),
       );
     }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    try{
+      // Trigger the authentication flow
+      final googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final googleAuth = await googleUser?.authentication;
+
+      if (googleAuth != null) {
+        // Create a new credential
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        // Once signed in, return the UserCredential
+        await _auth.signInWithCredential(credential);
+      }
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to sign in with Google: $e')),
+      );
+    }
+    
   }
 }

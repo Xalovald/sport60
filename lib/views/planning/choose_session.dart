@@ -86,7 +86,7 @@ class _ChooseSessionState extends State<ChooseSession> {
                   color: Colors.black,
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),

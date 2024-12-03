@@ -89,4 +89,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'sport60-db9b8.firebasestorage.app',
     measurementId: 'G-9TD5WRB43H',
   );
+
 }
