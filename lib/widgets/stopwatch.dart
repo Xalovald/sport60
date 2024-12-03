@@ -7,8 +7,8 @@ class StopwatchWidget extends StatefulWidget {
 }
 
 class _StopwatchWidgetState extends State<StopwatchWidget> {
-  late Stopwatch _stopwatch;
-  late Timer _timer;
+  Stopwatch _stopwatch = Stopwatch();
+  Timer? _timer;
   List<String> _savedTimes = [];
 
   @override
@@ -26,7 +26,7 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
 
   void _stopStopwatch() {
     _stopwatch.stop();
-    _timer.cancel();
+    _timer?.cancel();
   }
 
   void _resetStopwatch() {
@@ -101,7 +101,7 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 }

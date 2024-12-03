@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sport60/firebase_options.dart';
 import 'package:sport60/views/home.dart';
 import 'package:sport60/views/history/history_list.dart';
 import 'package:sport60/views/planning/planning_list.dart';
@@ -6,41 +7,29 @@ import 'package:sport60/widgets/notification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sport60/views/auth/auth_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  Future<FirebaseApp> _initializeFirebase() async {
-    return await Firebase.initializeApp();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _initializeFirebase(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MaterialApp(
-            title: 'Flutter Firebase Auth',
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            home: _getHomePage(),
-          );
-        }
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text('Error initializing Firebase'),
-          );
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+    return MaterialApp(
+      title: 'Sport60',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: _getHomePage(),
+      routes: {
+        '/login': (context) => const AuthPage(),
       },
     );
   }
@@ -195,10 +184,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _disconnect() {
-    // Add your disconnect logic here
-    // For example, sign out from Firebase Auth
-    FirebaseAuth.instance.signOut();
+  void _disconnect() async {
+    await FirebaseAuth.instance.signOut();
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+    //cancel timer
+
     // Navigate to the login screen or show a message
     Navigator.pushReplacementNamed(context, '/login');
   }
