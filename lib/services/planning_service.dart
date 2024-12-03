@@ -12,6 +12,14 @@ class PlanningService {
     return await _planningPersistance.getPlannings();
   }
 
+   Future<List<PlanningDomain>> getHistories() async {
+    return await _planningPersistance.getHistories();
+  }
+
+  Future<PlanningDomain> getPlanningBySessionId(int sessionId) async {
+    return await _planningPersistance.getPlanningBySessionId(sessionId);
+  }
+
   Future<int> deletePlanning(int planningId) async {
     return await _planningPersistance.deletePlanning(planningId);
   }

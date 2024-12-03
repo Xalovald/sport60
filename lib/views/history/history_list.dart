@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sport60/widgets/button.dart';
-import 'package:sport60/views/planning/choose_session.dart';
-import 'package:sport60/widgets/sound.dart';
+import 'package:sport60/domain/planning_domain.dart';
+import 'package:sport60/services/planning_service.dart';
+import 'package:sport60/views/dashboard/detail.dart';
 
 class HistoryList extends StatefulWidget {
   const HistoryList({super.key});
@@ -10,36 +10,55 @@ class HistoryList extends StatefulWidget {
 }
 
 class _HistoryListState extends State<HistoryList> {
+  final PlanningService _planningService = PlanningService();
+  List<PlanningDomain> _histories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHistories();
+  }
+
+  // Charger les plannings depuis la base de données
+  Future<void> _loadHistories() async {
+    List<PlanningDomain> histories = await _planningService.getHistories();
+    setState(() {
+      _histories = histories;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('History'),
-        ),
-        body: Column(
-          children: [
-            const Text("History"),
-            CustomButton(
-              onClick: () => {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const ChooseSession()))
+      appBar: AppBar(
+        title: const Text('Planned'),
+      ),
+      body: _histories.isEmpty
+          ? const Center(child: Text("Aucun planning disponible."))
+          : ListView.builder(
+              itemCount: _histories.length,
+              itemBuilder: (context, index) {
+                final history = _histories[index];
+                return ListTile(
+                  title: Text(
+                      "Session: ${history.sessionName} - ${history.dateRealized} à ${history.timeRealized}"),
+                  subtitle: Text("ID Session: ${history.sessionId}"),
+                  trailing: ElevatedButton(
+                    onPressed: () {
+                      // Navigation vers la nouvelle page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailDashboard(sessionId: history.sessionId),
+                        ),
+                      );
+                    },
+                    child: const Text("Voir"),
+                  ),
+                );
               },
-              decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  color: const Color.fromARGB(255, 224, 176, 255),
-                  border: Border.all(width: 2)),
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: 50,
-              heroTag: 'ChooseSessionButton',
-              child: const Text(
-                "Planifier une séance",
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
             ),
-          ],
-        ));
+    );
   }
 }

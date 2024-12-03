@@ -4,6 +4,8 @@ class PlanningDomain {
   final String sessionName;
   final String date;
   final String? time;
+  String? dateRealized;
+  String? timeRealized;
 
   PlanningDomain({
     this.id,
@@ -11,6 +13,8 @@ class PlanningDomain {
     required this.sessionName,
     required this.date,
     this.time,
+    this.dateRealized,
+    this.timeRealized,
   });
 
   Map<String, dynamic> toMap() {
@@ -19,6 +23,8 @@ class PlanningDomain {
       'session_id': sessionId,
       'date': date,
       'time': time,
+      'date_realized': dateRealized,
+      'time_realized': timeRealized,
     };
   }
 
@@ -29,6 +35,8 @@ class PlanningDomain {
       sessionName: map['session_name'] ?? '',
       date: map['date'],
       time: map['time'],
+      dateRealized: map['date_realized'],
+      timeRealized: map['time_realized'],
     );
   }
 }

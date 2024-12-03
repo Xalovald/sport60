@@ -101,6 +101,8 @@ class DatabaseConnect {
         session_id INTEGER NOT NULL,
         date TEXT,
         time TEXT,
+        date_realized TEXT,
+        time_realized TEXT,
         FOREIGN KEY (session_id) REFERENCES session(id)
       );
     ''');
