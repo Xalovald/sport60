@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sport60/widgets/button.dart';
+import 'package:sport60/widgets/commentary.dart';
+import 'package:sport60/widgets/commentaryGet.dart';
 import 'package:sport60/widgets/stopwatch.dart';
 import 'package:sport60/widgets/timer.dart';
 import 'package:sport60/widgets/sound.dart';
@@ -48,6 +50,7 @@ class _HomePageState extends State<HomePage> {
             },
             autoStart: false,
           ),
+          Expanded(child: CommentListWidget(sessionId: 1, exerciseId: 2)),
         ]));
   }
 }
