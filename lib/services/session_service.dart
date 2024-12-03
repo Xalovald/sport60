@@ -12,6 +12,10 @@ class SessionService {
     return await _sessionPersistance.getSessions();
   }
 
+  Future<SessionDomain> getSessionById(int sessionId) async {
+    return await _sessionPersistance.getSessionById(sessionId);
+  }
+
   Future<int> deleteSession(int sessionId) async {
     return await _sessionPersistance.deleteSession(sessionId);
   }
