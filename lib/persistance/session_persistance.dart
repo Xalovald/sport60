@@ -9,6 +9,16 @@ class SessionPersistance {
     return await db.insert('session', session.toMap());
   }
 
+  Future<SessionDomain> getSessionById(int sessionId) async {
+    final db = await _dbHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'session',
+      where: 'id = ?',
+      whereArgs: [sessionId],
+    );
+    return SessionDomain.fromMap(maps.first);
+  }
+
   Future<List<SessionDomain>> getSessions() async {
     final db = await _dbHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('session');
