@@ -56,7 +56,8 @@ class _DetailDashboardState extends State<DetailDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Détail de la Session'),
+        title: const Text("Détail de la Session"),
+        backgroundColor: const Color.fromARGB(255, 194, 167, 240),
       ),
       body: _session == null
           ? const Center(child: CircularProgressIndicator())
@@ -85,8 +86,6 @@ class _DetailDashboardState extends State<DetailDashboard> {
         const SizedBox(height: 10),
         Text('Réalisé le : ${_planning!.dateRealized} à ${_planning!.timeRealized}'),
         Text('Durée totale : ${_session!.totalDuration} secondes'),
-        Text('Pause totale : ${_session!.pauseDuration} secondes'),
-        Text('Type : ${_session!.sessionTypeId}'),
       ],
     );
   }
@@ -109,13 +108,14 @@ class _DetailDashboardState extends State<DetailDashboard> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Durée : ${exercise.duration} secondes'),
-                  Text('Répétitions : ${exercise.repetitions}'),
-                  Text('Séries : ${exercise.series}'),
-                  if (exercise.exercisePauseTime != null)
-                    Text('Pause entre exercices : ${exercise.exercisePauseTime} secondes'),
-                  if (exercise.seriePauseTime != null)
-                    Text('Pause entre séries : ${exercise.seriePauseTime} secondes'),
+                  Text(
+                    _session!.sessionTypeId == 1 ? 
+                      "Répétitions: ${_sessionExercises[index].repetitions}, séries: ${_sessionExercises[index].series}" 
+                    : _session!.sessionTypeId == 2 ?
+                      "Durée: ${_sessionExercises[index].duration} sec, séries: ${_sessionExercises[index].series}, pause entre exercices: ${_sessionExercises[index].exercisePauseTime}, pause entre séries ${_sessionExercises[index].seriePauseTime}"
+                    : 
+                      "Répétitions: ${_sessionExercises[index].repetitions}, séries: ${_sessionExercises[index].series}, pause entre séries: ${_sessionExercises[index].seriePauseTime}",
+                  ),
                 ],
               ),
             ),
