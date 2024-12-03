@@ -86,11 +86,7 @@ class _ChooseSessionState extends State<ChooseSession> {
                   color: Colors.black,
                 ),
               ),
-            ),
-            SoundWidget(
-                assetPath: "sounds/royal.mp3",
-                duration: Duration(seconds: 15),
-                schedule: Duration(seconds: 0))
+            )
           ],
         ),
       ),

@@ -25,6 +25,8 @@ class _InProgressSessionState extends State<InProgressSession> {
   bool _isResting = false;
   bool _isSessionTerminate = false;
 
+  bool _isStrarted = false;
+
   @override
   void initState() {
     super.initState();
@@ -104,12 +106,36 @@ class _InProgressSessionState extends State<InProgressSession> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
+    if (!_isStrarted) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Séance en cours')),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Démarer la séance !'),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _isStrarted = true;
+                  });
+                },
+                child: const Text('Démarrer'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     if (_isSessionTerminate) {
       return Scaffold(
         appBar: AppBar(title: const Text('Séance en cours')),
         body: const Center(child: Text('Séance terminée')),
       );
     }
+
+
 
     final currentExercise = _sessionExercises.isNotEmpty
         ? _sessionExercises[_currentExerciseIndex]
@@ -132,6 +158,7 @@ class _InProgressSessionState extends State<InProgressSession> {
                         _isSessionTerminate = true;
                       });
                     },
+                    autoStart: true,
                   ),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
@@ -158,23 +185,28 @@ class _InProgressSessionState extends State<InProgressSession> {
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 20),
-                      if (_isResting)
+                      if (_isResting) ...[
                         CountdownTimer(
                           key: ValueKey('pause-${_currentExerciseIndex}-${_currentSeries}'),
                           // maxTime: currentExercise!.exercisePauseTime ?? 0,
                           maxTime: _currentSeries == currentExercise!.series ? currentExercise.exercisePauseTime ?? 0 : currentExercise.seriePauseTime,
                           onTimeUp: _startNextStep,
+                          autoStart: true,
                         )
-                      // else if (currentExercise!.repetitions > 0)
-                      //   StopwatchWidget(
-                      //     onStop: _startNextStep,
-                      //   )
-                      else if (currentExercise != null && (currentExercise.duration ?? 0) > 0)
+                      ] else if (currentExercise != null && (currentExercise.repetitions ?? 0) > 0) ...[
+                        Text("Effectuer ${currentExercise.repetitions}"),
+                        ElevatedButton(
+                          onPressed: _startNextStep,
+                          child: Text('Terminé'),
+                        )
+                      ] else if (currentExercise != null && (currentExercise.duration ?? 0) > 0) ...[
                         CountdownTimer(
                           key: ValueKey('exercise-${_currentExerciseIndex}-${_currentSeries}'),
                           maxTime: currentExercise.duration ?? 0,
                           onTimeUp: _startNextStep,
+                          autoStart: true,
                         ),
+                      ],
                       const SizedBox(height: 20),
                       Text(
                         "Série ${_currentSeries} / ${currentExercise!.series}",
@@ -198,12 +230,14 @@ class _InProgressSessionState extends State<InProgressSession> {
                         key: ValueKey('serie-pause-${_currentExerciseIndex}-${_currentSeries}'),
                         maxTime: currentExercise!.seriePauseTime,
                         onTimeUp: _startNextStep,
+                        autoStart: true,
                       )
                     else
                       CountdownTimer(
                         key: ValueKey('exercise-${_currentExerciseIndex}-${_currentSeries}'),
                         maxTime: 60,
                         onTimeUp: _startNextStep,
+                        autoStart: true,
                       ),
                     const SizedBox(height: 20),
                     Text(
