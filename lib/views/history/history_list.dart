@@ -33,31 +33,56 @@ class _HistoryListState extends State<HistoryList> {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Planned'),
-      ),
       body: _histories.isEmpty
-          ? const Center(child: Text("Aucun planning disponible."))
+          ? const Center(child: Text("Aucune séance disponible.", style: TextStyle(fontSize: 18, color: Colors.grey)))
           : ListView.builder(
               itemCount: _histories.length,
               itemBuilder: (context, index) {
                 final history = _histories[index];
-                return ListTile(
-                  title: Text(
-                      "Session: ${history.sessionName} - ${history.dateRealized} à ${history.timeRealized}"),
-                  subtitle: Text("ID Session: ${history.sessionId}"),
-                  trailing: ElevatedButton(
-                    onPressed: () {
-                      // Navigation vers la nouvelle page
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              DetailDashboard(sessionId: history.sessionId),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(16.0),
+                      leading: const Icon(
+                        Icons.event,
+                        color: Colors.purple,
+                        size: 40,
+                      ),
+                      title: Text(
+                        history.sessionName,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Réalisé le: ${history.dateRealized} à ${history.timeRealized}"),
+                        ],
+                      ),
+                      trailing: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
-                      );
-                    },
-                    child: const Text("Voir"),
+                        onPressed: () {
+                          // Navigation vers la page d'inprogress
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailDashboard(sessionId: history.sessionId),
+                            ),
+                          );
+                        },
+                        child: const Text("Voir", style: TextStyle(fontSize: 14)),
+                      ),
+                    ),
                   ),
                 );
               },
