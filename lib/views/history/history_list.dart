@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sport60/widgets/button.dart';
 import 'package:sport60/views/planning/choose_session.dart';
-
+import 'package:sport60/widgets/sound.dart';
 
 class HistoryList extends StatefulWidget {
   const HistoryList({super.key});
@@ -13,17 +13,16 @@ class _HistoryListState extends State<HistoryList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('History'),
-      ),
-      body: 
-        Column(
-          children: [ 
+        appBar: AppBar(
+          title: const Text('History'),
+        ),
+        body: Column(
+          children: [
             const Text("History"),
             CustomButton(
               onClick: () => {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => const ChooseSession()))
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ChooseSession()))
               },
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
@@ -39,9 +38,8 @@ class _HistoryListState extends State<HistoryList> {
                   color: Colors.black,
                 ),
               ),
-            )
+            ),
           ],
-        )
-    );
+        ));
   }
 }

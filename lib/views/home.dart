@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sport60/widgets/button.dart';
 import 'package:sport60/widgets/stopwatch.dart';
 import 'package:sport60/widgets/timer.dart';
+import 'package:sport60/widgets/sound.dart';
 import 'package:sport60/views/planning/choose_session.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,8 +22,8 @@ class _HomePageState extends State<HomePage> {
           const Text("Home"),
           CustomButton(
             onClick: () => {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const ChooseSession()))
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ChooseSession()))
             },
             decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
@@ -41,10 +42,11 @@ class _HomePageState extends State<HomePage> {
           ),
           StopwatchWidget(),
           CountdownTimer(
-            maxTime: 10,
+            maxTime: 5,
             onTimeUp: () {
-              print('Time is up!');
+              print('Temps écoulé!');
             },
+            autoStart: false,
           ),
         ]));
   }

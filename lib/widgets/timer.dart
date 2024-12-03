@@ -1,47 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:sport60/widgets/sound.dart';
 import 'dart:async';
 
 class CountdownTimer extends StatefulWidget {
-  final int maxTime; // Time in seconds
-  final Function onTimeUp;
+  final int maxTime;
+  final VoidCallback onTimeUp;
+  final bool autoStart;
 
-  CountdownTimer({required this.maxTime, required this.onTimeUp, Key? key})
-      : super(key: key);
+  CountdownTimer(
+      {required this.maxTime, required this.onTimeUp, this.autoStart = false});
 
   @override
   _CountdownTimerState createState() => _CountdownTimerState();
 }
 
 class _CountdownTimerState extends State<CountdownTimer> {
-  late int remainingTime;
-  Timer? timer;
-  bool isStarted = false; // Track whether the timer has started
+  int _remainingTime = 0;
+  bool _isStarted = false;
+  late Timer _timer;
+  final SoundWidget _soundWidget = SoundWidget(
+    assetPath: 'sounds/time_up.mp3',
+    duration: Duration(seconds: 14), // Durée maximale de lecture
+    schedule: Duration(seconds: 0), // Temps avant démarrage de la sonnerie
+  );
 
   @override
   void initState() {
     super.initState();
-    remainingTime = widget.maxTime;
+    _remainingTime = widget.maxTime;
+    if (widget.autoStart) {
+      startTimer();
+    }
   }
 
   void startTimer() {
     setState(() {
-      isStarted = true; // Update state to indicate the timer has started
+      _isStarted = true;
     });
-    timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-      if (remainingTime > 0) {
-        setState(() {
-          remainingTime--;
-        });
-      } else {
-        timer.cancel();
-        widget.onTimeUp();
-      }
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+        } else {
+          _timer.cancel();
+          widget.onTimeUp();
+          _playSound();
+        }
+      });
+    });
+  }
+
+  void _playSound() {
+    setState(() {
+      _isStarted =
+          true; // Etat permettant de redémarrer ou non le compte à rebours
     });
   }
 
   @override
   void dispose() {
-    timer?.cancel();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -51,16 +69,19 @@ class _CountdownTimerState extends State<CountdownTimer> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Time remaining: $remainingTime seconds',
+          _remainingTime > 0
+              ? 'Temps restant: $_remainingTime secondes'
+              : 'Temps écoulé!',
           style: TextStyle(fontSize: 24),
         ),
         SizedBox(height: 20),
-        // Show the button only if the timer hasn't started yet
-        if (!isStarted)
+        if (!_isStarted && !widget.autoStart)
           ElevatedButton(
             onPressed: startTimer,
-            child: Text('Démarrer'), // Button to start the timer
+            child: Text('Démarrer'),
           ),
+        if (_remainingTime == 0)
+          _soundWidget, // Ajoutez _soundWidget à l'arbre des widgets lorsque le temps est écoulé
       ],
     );
   }

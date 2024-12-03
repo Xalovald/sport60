@@ -17,7 +17,8 @@ class PlanningCreate extends StatefulWidget {
 
 class _PlanningCreateState extends State<PlanningCreate> {
   final PlanningService _planningService = PlanningService();
-  final SessionExerciseService _sessionExerciseService = SessionExerciseService();
+  final SessionExerciseService _sessionExerciseService =
+      SessionExerciseService();
   List<SessionExerciseDomain> _sessionExercises = [];
   final _formKey = GlobalKey<FormState>();
 
@@ -33,7 +34,8 @@ class _PlanningCreateState extends State<PlanningCreate> {
 
   // Récupérer les exercices de la séance sélectionnée
   Future<void> _loadSessionExercises() async {
-    List<SessionExerciseDomain> sessionExercises = await _sessionExerciseService.getSessionExercisesBySessionId(widget.session.id!);
+    List<SessionExerciseDomain> sessionExercises = await _sessionExerciseService
+        .getSessionExercisesBySessionId(widget.session.id!);
     setState(() {
       _sessionExercises = sessionExercises;
     });
@@ -55,7 +57,7 @@ class _PlanningCreateState extends State<PlanningCreate> {
         time: time,
       );
       int planningId = await _planningService.addPlanning(planning);
-      if(planningId != 0){
+      if (planningId != 0) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Planning créé avec succès !')),
         );
@@ -105,87 +107,85 @@ class _PlanningCreateState extends State<PlanningCreate> {
                   ),
 
             const SizedBox(height: 20),
-              const Text(
-                "Créer un planning:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            const Text(
+              "Créer un planning:",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  // Sélection de la date
+                  TextFormField(
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      labelText: "Sélectionnez une date",
+                      border: OutlineInputBorder(),
+                    ),
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2100),
+                      );
+                      setState(() {
+                        _selectedDate = pickedDate;
+                      });
+                    },
+                    validator: (value) {
+                      if (_selectedDate == null) {
+                        return "Veuillez sélectionner une date";
+                      }
+                      return null;
+                    },
+                    controller: TextEditingController(
+                      text: _selectedDate != null
+                          ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
+                          : '',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Sélection de l'heure
+                  TextFormField(
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      labelText: "Sélectionnez une heure",
+                      border: OutlineInputBorder(),
+                    ),
+                    onTap: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+                      if (pickedTime != null) {
+                        setState(() {
+                          _selectedTime = pickedTime;
+                        });
+                      }
+                    },
+                    validator: (value) {
+                      if (_selectedTime == null) {
+                        return "Veuillez sélectionner une heure";
+                      }
+                      return null;
+                    },
+                    controller: TextEditingController(
+                      text: _selectedTime != null
+                          ? _selectedTime!.format(context)
+                          : '',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Bouton de soumission
+                  ElevatedButton(
+                    onPressed: _submitForm,
+                    child: const Text("Créer le planning"),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    // Sélection de la date
-                    TextFormField(
-                      readOnly: true,
-                      decoration: const InputDecoration(
-                        labelText: "Sélectionnez une date",
-                        border: OutlineInputBorder(),
-                      ),
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2100),
-                        );
-                        if (pickedDate != null) {
-                          setState(() {
-                            _selectedDate = pickedDate;
-                          });
-                        }
-                      },
-                      validator: (value) {
-                        if (_selectedDate == null) {
-                          return "Veuillez sélectionner une date";
-                        }
-                        return null;
-                      },
-                      controller: TextEditingController(
-                        text: _selectedDate != null
-                            ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
-                            : '',
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    // Sélection de l'heure
-                    TextFormField(
-                      readOnly: true,
-                      decoration: const InputDecoration(
-                        labelText: "Sélectionnez une heure",
-                        border: OutlineInputBorder(),
-                      ),
-                      onTap: () async {
-                        TimeOfDay? pickedTime = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                        );
-                        if (pickedTime != null) {
-                          setState(() {
-                            _selectedTime = pickedTime;
-                          });
-                        }
-                      },
-                      validator: (value) {
-                        if (_selectedTime == null) {
-                          return "Veuillez sélectionner une heure";
-                        }
-                        return null;
-                      },
-                      controller: TextEditingController(
-                        text: _selectedTime != null
-                            ? _selectedTime!.format(context)
-                            : '',
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    // Bouton de soumission
-                    ElevatedButton(
-                      onPressed: _submitForm,
-                      child: const Text("Créer le planning"),
-                    ),
-                  ],
-                ),
-              ),
+            ),
           ],
         ),
       ),
