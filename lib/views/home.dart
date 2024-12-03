@@ -22,8 +22,8 @@ class _HomePageState extends State<HomePage> {
           const Text("Home"),
           CustomButton(
             onClick: () => {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => const ChooseSession()))
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ChooseSession()))
             },
             decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
             onTimeUp: () {
               print('Temps écoulé!');
             },
+            autoStart: false,
           ),
         ]));
   }

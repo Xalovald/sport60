@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 //import 'package:intl/intl.dart';
 import 'package:sport60/domain/session_domain.dart';
@@ -17,6 +15,7 @@ class CreateSession extends StatefulWidget {
   @override
   State<CreateSession> createState() => _CreateSessionState();
 }
+
 class _CreateSessionState extends State<CreateSession> {
   final _formKey = GlobalKey<FormState>();
   final _exerciseFormKey = GlobalKey<FormState>();
@@ -38,7 +37,8 @@ class _CreateSessionState extends State<CreateSession> {
 
   final SessionService _sessionService = SessionService();
   final SessionTypeService _sessionTypeService = SessionTypeService();
-  final SessionExerciseService _sessionExerciseService = SessionExerciseService();
+  final SessionExerciseService _sessionExerciseService =
+      SessionExerciseService();
   final ExerciseService _exerciseService = ExerciseService();
 
   @override
@@ -71,7 +71,7 @@ class _CreateSessionState extends State<CreateSession> {
 
       // Créer les session_exercises
       for (var sessionExercise in _sessionExercises) {
-        sessionExercise.sessionId = sessionId;  // Associer l'ID de la session
+        sessionExercise.sessionId = sessionId; // Associer l'ID de la session
         await _sessionExerciseService.addSessionExercise(sessionExercise);
       }
 
@@ -88,11 +88,13 @@ class _CreateSessionState extends State<CreateSession> {
   // Ajouter un exercice à la session
   void _addSessionExercise() async {
     if (_selectedExerciseId != null) {
-      final exercise = await _exerciseService.getExerciseById(_selectedExerciseId!);
+      final exercise =
+          await _exerciseService.getExerciseById(_selectedExerciseId!);
 
       setState(() {
         _sessionExercises.add(SessionExerciseDomain(
-          sessionId: 0,  // Cette valeur sera mise à jour lors de la création de la session
+          sessionId:
+              0, // Cette valeur sera mise à jour lors de la création de la session
           exerciseId: _selectedExerciseId!,
           duration: _exerciseDuration,
           repetitions: _exerciseRepetitions,
@@ -135,7 +137,8 @@ class _CreateSessionState extends State<CreateSession> {
                 ),
                 // Champ pour la description de l'exercice
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Description de l\'exercice'),
+                  decoration:
+                      InputDecoration(labelText: 'Description de l\'exercice'),
                   onChanged: (value) {
                     setState(() {
                       _newExerciseDescription = value;
@@ -163,7 +166,8 @@ class _CreateSessionState extends State<CreateSession> {
                 if (_exerciseFormKey.currentState!.validate()) {
                   // Créer un nouvel exercice
                   final newExercise = ExerciseDomain(
-                    id: DateTime.now().millisecondsSinceEpoch, // Génère un ID unique
+                    id: DateTime.now()
+                        .millisecondsSinceEpoch, // Génère un ID unique
                     name: _newExerciseName!,
                     description: _newExerciseDescription!,
                   );
@@ -253,9 +257,10 @@ class _CreateSessionState extends State<CreateSession> {
                 ),
 
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Total duration (s)'),
+                  decoration:
+                      const InputDecoration(labelText: 'Total duration (s)'),
                   keyboardType: TextInputType.number,
-                  enabled: _sessionTypeId == 1, 
+                  enabled: _sessionTypeId == 1,
                   onChanged: (value) {
                     setState(() {
                       _totalDuration = int.tryParse(value) ?? 0;
@@ -276,7 +281,8 @@ class _CreateSessionState extends State<CreateSession> {
 
                 // Select exercise
                 DropdownButtonFormField<int>(
-                  decoration: InputDecoration(labelText: 'Sélectionner un exercice'),
+                  decoration:
+                      InputDecoration(labelText: 'Sélectionner un exercice'),
                   value: _selectedExerciseId,
                   items: _exercises
                       .map((exercise) => DropdownMenuItem<int>(
@@ -298,18 +304,23 @@ class _CreateSessionState extends State<CreateSession> {
                 ),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center, // Centrer les éléments
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Centrer les éléments
                   children: [
                     Expanded(
                       child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'Duration (s)'),
+                        decoration:
+                            const InputDecoration(labelText: 'Duration (s)'),
                         keyboardType: TextInputType.number,
-                        enabled: _exerciseRepetitions == 0 && _sessionTypeId == 2, // Désactivé si des répétitions sont définies
+                        enabled: _exerciseRepetitions == 0 &&
+                            _sessionTypeId ==
+                                2, // Désactivé si des répétitions sont définies
                         onChanged: (value) {
                           setState(() {
                             _exerciseDuration = int.tryParse(value) ?? 0;
                             if (_exerciseDuration > 0) {
-                              _exerciseRepetitions = 0; // Réinitialise les répétitions
+                              _exerciseRepetitions =
+                                  0; // Réinitialise les répétitions
                             }
                           });
                         },
@@ -321,9 +332,11 @@ class _CreateSessionState extends State<CreateSession> {
                     ),
                     Expanded(
                       child: TextFormField(
-                        decoration: const InputDecoration(labelText: 'Repetitions'),
+                        decoration:
+                            const InputDecoration(labelText: 'Repetitions'),
                         keyboardType: TextInputType.number,
-                        enabled: _exerciseDuration == 0, // Désactivé si la durée est définie
+                        enabled: _exerciseDuration ==
+                            0, // Désactivé si la durée est définie
                         onChanged: (value) {
                           setState(() {
                             _exerciseRepetitions = int.tryParse(value) ?? 0;
@@ -337,7 +350,6 @@ class _CreateSessionState extends State<CreateSession> {
                   ],
                 ),
 
-
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Series'),
                   keyboardType: TextInputType.number,
@@ -349,7 +361,8 @@ class _CreateSessionState extends State<CreateSession> {
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Pause entre exercice'),
+                  decoration:
+                      InputDecoration(labelText: 'Pause entre exercice'),
                   keyboardType: TextInputType.number,
                   enabled: _sessionTypeId == 2,
                   onChanged: (value) {
@@ -379,7 +392,8 @@ class _CreateSessionState extends State<CreateSession> {
 
                 // List added exercises
                 if (_sessionExercises.isNotEmpty) ...[
-                  Text('Exercises in Session:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Exercises in Session:',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: _sessionExercises.length,
@@ -393,9 +407,9 @@ class _CreateSessionState extends State<CreateSession> {
                     },
                   ),
                 ],
-                
+
                 SizedBox(height: 50),
-                
+
                 // Submit the session
                 ElevatedButton(
                   onPressed: _createSession,
@@ -408,11 +422,7 @@ class _CreateSessionState extends State<CreateSession> {
       ),
     );
   }
-  
-  
-  
-  
-  
+
   // final SessionService _sessionService = SessionService();
   // final ExerciseService _exerciseService = ExerciseService();
 
@@ -436,7 +446,7 @@ class _CreateSessionState extends State<CreateSession> {
 
   // // Récupérer la liste des exercices existants
   // Future<void> _loadExercises() async {
-  //   List<ExerciseDomain> exercises = await _exerciseService.getExercise(); 
+  //   List<ExerciseDomain> exercises = await _exerciseService.getExercise();
   //   setState(() {
   //     _exercises = exercises;
   //   });
@@ -452,7 +462,7 @@ class _CreateSessionState extends State<CreateSession> {
   //     );
 
   //     int sessionId = await _sessionService.addSession(newSession);
-      
+
   //     // Ajouter les exercices associés à la séance
   //     for (var exercise in _addedExercises) {
   //       exercise.sessionId = sessionId;

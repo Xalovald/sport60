@@ -4,6 +4,7 @@ import 'package:sport60/domain/session_domain.dart';
 import 'package:sport60/views/planning/create.dart';
 import 'package:sport60/views/session/create.dart';
 import 'package:sport60/widgets/button.dart';
+import 'package:sport60/widgets/sound.dart';
 
 class ChooseSession extends StatefulWidget {
   const ChooseSession({super.key});
@@ -57,18 +58,19 @@ class _ChooseSessionState extends State<ChooseSession> {
                   );
                 }
               },
-              items: _sessions.map<DropdownMenuItem<SessionDomain>>((SessionDomain session) {
+              items: _sessions.map<DropdownMenuItem<SessionDomain>>(
+                  (SessionDomain session) {
                 return DropdownMenuItem<SessionDomain>(
                   value: session,
                   child: Text(session.name),
                 );
               }).toList(),
             ),
-            
+
             CustomButton(
               onClick: () => {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => const CreateSession()))
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const CreateSession()))
               },
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
@@ -84,7 +86,11 @@ class _ChooseSessionState extends State<ChooseSession> {
                   color: Colors.black,
                 ),
               ),
-            )
+            ),
+            SoundWidget(
+                assetPath: "sounds/royal.mp3",
+                duration: Duration(seconds: 15),
+                schedule: Duration(seconds: 0))
           ],
         ),
       ),
