@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:intl/intl.dart';
 import 'package:sport60/domain/session_domain.dart';
 import 'package:sport60/domain/exercise_domain.dart';
 import 'package:sport60/domain/session_exercise_domain.dart';
@@ -8,6 +7,8 @@ import 'package:sport60/services/session_service.dart';
 import 'package:sport60/services/session_type_service.dart';
 import 'package:sport60/services/session_exercise_service.dart';
 import 'package:sport60/services/exercise_service.dart';
+import 'package:sport60/views/planning/choose_session.dart';
+import 'package:sport60/widgets/button.dart';
 
 class CreateSession extends StatefulWidget {
   const CreateSession({super.key});
@@ -21,7 +22,7 @@ class _CreateSessionState extends State<CreateSession> {
   final _exerciseFormKey = GlobalKey<FormState>();
 
   String? _sessionName;
-  int? _sessionTypeId;
+  int? _sessionTypeId = 1;
   int? _totalDuration;
   int? _selectedExerciseId;
   int _exerciseDuration = 0;
@@ -75,37 +76,38 @@ class _CreateSessionState extends State<CreateSession> {
         await _sessionExerciseService.addSessionExercise(sessionExercise);
       }
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Session created successfully!')),
+      if (sessionId != 0) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ChooseSession(),
+          ),
         );
       }
-      // Reset fields
-      setState(() {
-        _sessionExercises.clear();
-      });
     }
   }
   // Ajouter un exercice à la session
   void _addSessionExercise() async {
-    if (_selectedExerciseId != null) {
-      final exercise =
-          await _exerciseService.getExerciseById(_selectedExerciseId!);
+    if (_formKey.currentState?.validate() ?? false) {
+      if (_selectedExerciseId != null) {
+        final exercise =
+            await _exerciseService.getExerciseById(_selectedExerciseId!);
 
-      setState(() {
-        _sessionExercises.add(SessionExerciseDomain(
-          sessionId:
-              0, // Cette valeur sera mise à jour lors de la création de la session
-          exerciseId: _selectedExerciseId!,
-          duration: _exerciseDuration,
-          repetitions: _exerciseRepetitions,
-          series: _exerciseSeries,
-          exercisePauseTime: _exercisePauseTime,
-          seriePauseTime: _exerciseSeriePauseTime,
-          exerciseName: exercise.name,
-          exerciseDescription: exercise.description,
-        ));
-      });
+        setState(() {
+          _sessionExercises.add(SessionExerciseDomain(
+            sessionId:
+                0, // Cette valeur sera mise à jour lors de la création de la session
+            exerciseId: _selectedExerciseId!,
+            duration: _exerciseDuration,
+            repetitions: _exerciseRepetitions,
+            series: _exerciseSeries,
+            exercisePauseTime: _exercisePauseTime,
+            seriePauseTime: _exerciseSeriePauseTime,
+            exerciseName: exercise.name,
+            exerciseDescription: exercise.description,
+          ));
+        });
+      }
     }
   }
 
@@ -198,7 +200,10 @@ class _CreateSessionState extends State<CreateSession> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Create Session')),
+      appBar: AppBar(
+        title: const Text('Création de la séance'),
+        backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -207,12 +212,17 @@ class _CreateSessionState extends State<CreateSession> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Session name
+                const SizedBox(height: 20),
+
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Session Name'),
+                  decoration: const InputDecoration(
+                    labelText: "Entrer un nom",
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.fitness_center),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a session name';
+                      return 'Veuillez renseigner un nom';
                     }
                     return null;
                   },
@@ -220,21 +230,25 @@ class _CreateSessionState extends State<CreateSession> {
                     _sessionName = value;
                   },
                 ),
-
+                const SizedBox(height: 20),
                 // Session type
                 FutureBuilder<List<SessionTypeDomain>>(
                   future: _sessionTypeService.getSessionTypes(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }
                     if (snapshot.hasError) {
-                      return Text('Error loading session types');
+                      return const Text('Error loading session types');
                     }
 
                     final sessionTypes = snapshot.data!;
                     return DropdownButtonFormField<int>(
-                      decoration: InputDecoration(labelText: 'Session Type'),
+                      decoration: const InputDecoration(
+                        labelText: "Sélectionner un type",
+                        border: OutlineInputBorder(),
+                        suffixIcon: Icon(Icons.category),
+                      ),
                       value: _sessionTypeId,
                       items: sessionTypes
                           .map((type) => DropdownMenuItem<int>(
@@ -249,7 +263,7 @@ class _CreateSessionState extends State<CreateSession> {
                       },
                       validator: (value) {
                         if (value == null) {
-                          return 'Please select a session type';
+                          return 'Veuillez sélectionner un type de séance';
                         }
                         return null;
                       },
@@ -257,33 +271,60 @@ class _CreateSessionState extends State<CreateSession> {
                   },
                 ),
 
-                TextFormField(
-                  decoration:
-                      const InputDecoration(labelText: 'Total duration (s)'),
-                  keyboardType: TextInputType.number,
-                  enabled: _sessionTypeId == 1,
-                  onChanged: (value) {
-                    setState(() {
-                      _totalDuration = int.tryParse(value) ?? 0;
-                    });
-                  },
-                ),
+                if(_sessionTypeId == 1)...[
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Total duration (s)",
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.access_time),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _totalDuration = int.tryParse(value) ?? 0;
+                      });
+                    },
+                    validator: (value) {
+                      if (_sessionTypeId == 1 && (value == null || value.isEmpty)) {
+                        return 'Veuillez renseigner la durée';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              
+                const SizedBox(height: 70),
 
-                SizedBox(height: 70),
-
-                // Ajouter un nouvel exercice via le bouton
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: ElevatedButton(
-                    onPressed: _showAddExerciseDialog,
-                    child: Text('Ajouter un exercice'),
+                CustomButton(
+                  onClick: _showAddExerciseDialog,
+                  heroTag: 'AddExercise',
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.purple,
+                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                  ),
+                  child: const Text(
+                    "Ajouter un exercice",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
+                const SizedBox(height: 20),
 
                 // Select exercise
                 DropdownButtonFormField<int>(
-                  decoration:
-                      InputDecoration(labelText: 'Sélectionner un exercice'),
+                  decoration: const InputDecoration(
+                    labelText: "Sélectionner un exercice'",
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.fitness_center),
+                  ),
                   value: _selectedExerciseId,
                   items: _exercises
                       .map((exercise) => DropdownMenuItem<int>(
@@ -304,117 +345,200 @@ class _CreateSessionState extends State<CreateSession> {
                   },
                 ),
 
-                Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center, // Centrer les éléments
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        decoration:
-                            const InputDecoration(labelText: 'Duration (s)'),
-                        keyboardType: TextInputType.number,
-                        enabled: _exerciseRepetitions == 0 &&
-                            _sessionTypeId ==
-                                2, // Désactivé si des répétitions sont définies
-                        onChanged: (value) {
-                          setState(() {
-                            _exerciseDuration = int.tryParse(value) ?? 0;
-                            if (_exerciseDuration > 0) {
-                              _exerciseRepetitions =
-                                  0; // Réinitialise les répétitions
-                            }
-                          });
-                        },
-                      ),
+                if(_sessionTypeId == 2) ...[
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Durée (s)",
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.access_time),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('ou'),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _exerciseDuration = int.tryParse(value) ?? 0;
+                      });
+                    },
+                    validator: (value) {
+                      if (_sessionTypeId == 2 && (value == null || value.isEmpty)) {
+                        return 'Veuillez renseigner la durée';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+                
+                if(_sessionTypeId != 2) ...[
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Repetitions",
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.repeat),
                     ),
-                    Expanded(
-                      child: TextFormField(
-                        decoration:
-                            const InputDecoration(labelText: 'Repetitions'),
-                        keyboardType: TextInputType.number,
-                        enabled: _exerciseDuration ==
-                            0, // Désactivé si la durée est définie
-                        onChanged: (value) {
-                          setState(() {
-                            _exerciseRepetitions = int.tryParse(value) ?? 0;
-                            if (_exerciseRepetitions > 0) {
-                              _exerciseDuration = 0; // Réinitialise la durée
-                            }
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Series'),
-                  keyboardType: TextInputType.number,
-                  enabled: _sessionTypeId != 1,
-                  onChanged: (value) {
-                    setState(() {
-                      _exerciseSeries = int.tryParse(value) ?? 1;
-                    });
-                  },
-                ),
-                TextFormField(
-                  decoration:
-                      InputDecoration(labelText: 'Pause entre exercice'),
-                  keyboardType: TextInputType.number,
-                  enabled: _sessionTypeId == 2,
-                  onChanged: (value) {
-                    setState(() {
-                      _exercisePauseTime = int.tryParse(value) ?? 0;
-                    });
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'pause entre série'),
-                  keyboardType: TextInputType.number,
-                  enabled: _sessionTypeId != 1,
-                  onChanged: (value) {
-                    setState(() {
-                      _exerciseSeriePauseTime = int.tryParse(value) ?? 0;
-                    });
-                  },
-                ),
-
-                // Add Exercise button
-                ElevatedButton(
-                  onPressed: _addSessionExercise,
-                  child: Text('Add Exercise to Session'),
-                ),
-
-                SizedBox(height: 50),
-
-                // List added exercises
-                if (_sessionExercises.isNotEmpty) ...[
-                  Text('Exercises in Session:',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _sessionExercises.length,
-                    itemBuilder: (context, index) {
-                      var sessionExercise = _sessionExercises[index];
-                      return ListTile(
-                        title: Text(sessionExercise.exerciseName!),
-                        subtitle: Text(
-                            'Duration: ${sessionExercise.duration}s, Reps: ${sessionExercise.repetitions}, Series: ${sessionExercise.series}, Pause Exercise: ${sessionExercise.exercisePauseTime}s, Pause série: ${sessionExercise.seriePauseTime}s'),
-                      );
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _exerciseRepetitions = int.tryParse(value) ?? 0;
+                      });
+                    },
+                    validator: (value) {
+                      if (_sessionTypeId != 2 && (value == null || value.isEmpty)) {
+                        return 'Veuillez renseigner le nombre de répétition';
+                      }
+                      return null;
                     },
                   ),
                 ],
 
-                SizedBox(height: 50),
+                if(_sessionTypeId != 1) ...[
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Series",
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.numbers),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _exerciseSeries = int.tryParse(value) ?? 1;
+                      });
+                    },
+                    validator: (value) {
+                      if (_sessionTypeId != 1 && (value == null || value.isEmpty)) {
+                        return 'Veuillez renseigner le nombre de série';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
 
-                // Submit the session
-                ElevatedButton(
-                  onPressed: _createSession,
-                  child: Text('Create Session'),
+                if(_sessionTypeId == 2) ...[
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Pause entre exercices",
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.access_time),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _exercisePauseTime = int.tryParse(value) ?? 0;
+                      });
+                    },
+                    validator: (value) {
+                      if (_sessionTypeId == 2 && (value == null || value.isEmpty)) {
+                        return 'Veuillez renseigner le temps de pause entre les exercices';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+                if(_sessionTypeId != 1) ...[
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Pause entre séries",
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.access_time),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _exerciseSeriePauseTime = int.tryParse(value) ?? 0;
+                      });
+                    },
+                    validator: (value) {
+                      if (_sessionTypeId != 1 && (value == null || value.isEmpty)) {
+                        return 'Veuillez renseigner le temps de pause entre les séries';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+
+                const SizedBox(height: 20),
+                
+                CustomButton(
+                  onClick: _addSessionExercise,
+                  heroTag: 'AddExerciseToSession',
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.purple,
+                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                  ),
+                  child: const Text(
+                    "Ajouté l'exercice à la session",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+                
+                _sessionExercises.isEmpty
+                  ? const Text("Aucun exercice sélectionné.",
+                      style: TextStyle(color: Colors.grey))
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _sessionExercises.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 5,
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(12),
+                            title: Text(_sessionExercises[index].exerciseName!),
+                            subtitle: Text(
+                              _sessionTypeId == 1 ? 
+                                "Répétitions: ${_sessionExercises[index].repetitions}" 
+                              : _sessionTypeId == 2 ?
+                               "Durée: ${_sessionExercises[index].duration} sec, séries: ${_sessionExercises[index].series}, pause entre exercices: ${_sessionExercises[index].exercisePauseTime}, pause entre séries ${_sessionExercises[index].seriePauseTime}"
+                              : 
+                                "Répétitions: ${_sessionExercises[index].repetitions}, séries: ${_sessionExercises[index].series}, pause entre séries: ${_sessionExercises[index].seriePauseTime}",
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                const SizedBox(height: 50),
+
+                CustomButton(
+                  onClick: _createSession,
+                  heroTag: 'CreateSession',
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: const LinearGradient(
+                      colors: [Colors.deepPurple, Colors.purpleAccent],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                  ),
+                  child: const Text(
+                    "Créer la séance",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -9,10 +9,10 @@ import audioplayers_darwin
 import firebase_auth
 import firebase_core
 import flutter_local_notifications
+import google_sign_in_ios
 import path_provider_foundation
 import speech_to_text_macos
 import sqflite_darwin
-import google_sign_in_ios
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AudioplayersDarwinPlugin.register(with: registry.registrar(forPlugin: "AudioplayersDarwinPlugin"))

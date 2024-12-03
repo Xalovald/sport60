@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/services/planning_service.dart';
 import 'package:sport60/views/session/in_progress.dart';
+import 'package:sport60/widgets/button.dart';
 
 class PlanningList extends StatefulWidget {
   const PlanningList({super.key});
@@ -30,31 +31,57 @@ class _PlanningListState extends State<PlanningList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Planned'),
-      ),
       body: _plannings.isEmpty
-          ? const Center(child: Text("Aucun planning disponible."))
+          ? const Center(child: Text("Aucun planning disponible.", style: TextStyle(fontSize: 18, color: Colors.grey)))
           : ListView.builder(
               itemCount: _plannings.length,
               itemBuilder: (context, index) {
                 final planning = _plannings[index];
-                return ListTile(
-                  title: Text(
-                      "Session: ${planning.sessionName} - ${planning.date} à ${planning.time}"),
-                  subtitle: Text("ID Session: ${planning.sessionId}"),
-                  trailing: ElevatedButton(
-                    onPressed: () {
-                      // Navigation vers la nouvelle page
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              InProgressSession(sessionId: planning.sessionId),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(16.0),
+                      leading: const Icon(
+                        Icons.event,
+                        color: Colors.purple,
+                        size: 40,
+                      ),
+                      title: Text(
+                        planning.sessionName,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Date: ${planning.date}"),
+                          Text("Heure: ${planning.time}"),
+                        ],
+                      ),
+                      trailing: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
-                      );
-                    },
-                    child: const Text("Démarrer"),
+                        onPressed: () {
+                          // Navigation vers la page d'inprogress
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  InProgressSession(sessionId: planning.sessionId),
+                            ),
+                          );
+                        },
+                        child: const Text("Démarrer", style: TextStyle(fontSize: 14)),
+                      ),
+                    ),
                   ),
                 );
               },

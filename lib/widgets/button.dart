@@ -25,40 +25,45 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      shadowPainter != null
-          ? CustomPaint(
-              painter: shadowPainter,
-              child: SizedBox(
-                width: width,
-                height: height,
+    return Center( // Ajout du Center pour centrer le bouton
+      child: Stack(
+        alignment: Alignment.center, // Assure que les éléments dans le Stack sont centrés
+        children: [
+          shadowPainter != null
+              ? CustomPaint(
+                  painter: shadowPainter,
+                  child: SizedBox(
+                    width: width,
+                    height: height,
+                  ),
+                )
+              : SizedBox(
+                  width: width,
+                  height: height,
+                ),
+          SizedBox(
+            width: width,
+            height: height,
+            child: Container(
+              decoration: decoration,
+              child: FloatingActionButton(
+                elevation: 0,
+                onPressed: onClick,
+                heroTag: heroTag,
+                focusColor: noAnimation ? Colors.transparent : null,
+                splashColor: noAnimation ? Colors.transparent : null,
+                hoverColor: noAnimation ? Colors.transparent : null,
+                highlightElevation: noAnimation ? 0 : null,
+                focusElevation: noAnimation ? 0 : null,
+                hoverElevation: noAnimation ? 0 : null,
+                disabledElevation: noAnimation ? 0 : null,
+                backgroundColor: Colors.transparent,
+                child: Center(child: child), // Centrage du contenu interne
               ),
-            )
-          : SizedBox(
-              width: width,
-              height: height,
             ),
-      SizedBox(
-        width: width,
-        height: height,
-        child: Container(
-          decoration: decoration,
-          child: FloatingActionButton(
-            elevation: 0,
-            onPressed: onClick,
-            heroTag: heroTag,
-            focusColor: noAnimation ? Colors.transparent : null,
-            splashColor: noAnimation ? Colors.transparent : null,
-            hoverColor: noAnimation ? Colors.transparent : null,
-            highlightElevation: noAnimation ? 0 : null,
-            focusElevation: noAnimation ? 0 : null,
-            hoverElevation: noAnimation ? 0 : null,
-            disabledElevation: noAnimation ? 0 : null,
-            backgroundColor: Colors.transparent,
-            child: Center(child: child),
           ),
-        ),
+        ],
       ),
-    ]);
+    );
   }
 }
