@@ -4,6 +4,7 @@ import 'package:sport60/services/session_service.dart';
 import 'package:sport60/domain/session_domain.dart';
 import 'package:sport60/domain/session_exercise_domain.dart';
 import 'package:sport60/widgets/timer.dart';
+import 'package:sport60/widgets/stopwatch.dart';
 
 class InProgressSession extends StatefulWidget {
   final int sessionId;
@@ -15,6 +16,9 @@ class InProgressSession extends StatefulWidget {
 }
 
 class _InProgressSessionState extends State<InProgressSession> {
+  final GlobalKey<StopwatchWidgetState> _stopwatchKey = GlobalKey();
+  int _totalDuration = 0;
+
   final SessionService _sessionService = SessionService();
   final SessionExerciseService _sessionExerciseService = SessionExerciseService();
 
@@ -63,6 +67,7 @@ class _InProgressSessionState extends State<InProgressSession> {
         });
 
         if (_currentExerciseIndex >= _sessionExercises.length) {
+          _stopwatchKey.currentState?.stopStopwatch();
           _showSessionCompleteDialog();
           setState(() {
             _isSessionTerminate = true;
@@ -98,6 +103,12 @@ class _InProgressSessionState extends State<InProgressSession> {
         ],
       ),
     );
+  }
+
+  void handleStopwatchStop(int elapsedMilliseconds) {
+    setState(() {
+      _totalDuration = (elapsedMilliseconds / 1000).truncate();
+    });
   }
 
   @override
@@ -178,10 +189,15 @@ class _InProgressSessionState extends State<InProgressSession> {
                   ),
                 ] else if (_session!.sessionTypeId == 2) ...[
                     if (currentExercise != null)
+                      StopwatchWidget(
+                        key: _stopwatchKey, // Passez la clé au widget
+                        onStop: handleStopwatchStop,
+                        autoStart: true,
+                      ),
                       Text(
                         _isResting
-                            ? "Repos : ${_currentSeries == currentExercise.series ? currentExercise.exercisePauseTime : currentExercise.seriePauseTime}s"
-                            : "Exercice : ${currentExercise.exerciseName}",
+                            ? "Repos : ${_currentSeries == currentExercise!.series ? currentExercise.exercisePauseTime : currentExercise.seriePauseTime}s"
+                            : "Exercice : ${currentExercise!.exerciseName}",
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 20),
@@ -218,10 +234,15 @@ class _InProgressSessionState extends State<InProgressSession> {
                       ),
                 ] else if (_session!.sessionTypeId == 3) ...[
                   if (currentExercise != null)
+                      StopwatchWidget(
+                        key: _stopwatchKey, // Passez la clé au widget
+                        onStop: handleStopwatchStop,
+                        autoStart: true,
+                      ),
                       Text(
                         _isResting
-                            ? "Repos : ${currentExercise.seriePauseTime}s"
-                            : "Exercice : ${currentExercise.exerciseName}, x${currentExercise.repetitions} reps",
+                            ? "Repos : ${currentExercise!.seriePauseTime}s"
+                            : "Exercice : ${currentExercise!.exerciseName}, x${currentExercise.repetitions} reps",
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                     const SizedBox(height: 20),
