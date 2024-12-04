@@ -22,6 +22,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Home'),
+          backgroundColor: themeNotifier.currentTheme.primaryColor,
+          foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
         ),
         body: Column(children: [
           const Text("Home"),
@@ -33,7 +35,7 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
-                color: themeNotifier.buttonColor,
+                color: themeNotifier.currentTheme.colorScheme.secondary,
                 border: Border.all(width: 2)),
             width: MediaQuery.of(context).size.width * 0.8,
             height: 50,
@@ -41,7 +43,8 @@ class _HomePageState extends State<HomePage> {
             child: Text(
               "Planifier une séance",
               style: TextStyle(
-                color: themeNotifier.buttonTextColor,
+                //apply cutom button color
+                color: themeNotifier.currentTheme.colorScheme.inversePrimary,
               ),
             ),
           ),

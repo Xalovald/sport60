@@ -119,7 +119,7 @@ class _ChooseSessionState extends State<ChooseSession> {
               child: Text(
                 "Ajouter une séance",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),

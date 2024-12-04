@@ -1,101 +1,61 @@
 import 'package:flutter/material.dart';
 
 class ThemeNotifier extends ChangeNotifier {
-  static const Color defaultThemeColor = Colors.blue;
-  static const Color darkModeButtonColor = Color.fromARGB(255, 224, 176, 255);
-  static const Color lightModeButtonColor = Colors.blue;
+  static const Color defaultLightButtonColor = Colors.blue;
+  static const Color defaultDarkButtonColor = Color.fromARGB(255, 224, 176, 255);
 
   ThemeData _currentTheme = ThemeData.light();
+  Color _customButtonColor = defaultLightButtonColor;
+
+  ThemeNotifier() {
+    setLightTheme(); // Thème clair par défaut
+  }
 
   ThemeData get currentTheme => _currentTheme;
 
-  Color get buttonColor => _currentTheme.brightness == Brightness.dark
-      ? darkModeButtonColor
-      : lightModeButtonColor;
-
-  Color get buttonTextColor => _currentTheme.brightness == Brightness.dark
-      ? Colors.white
-      : Colors.black;
-
   void setLightTheme() {
+    _customButtonColor = defaultLightButtonColor;
     _currentTheme = ThemeData.light().copyWith(
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: lightModeButtonColor,
-        ),
-      ),
-      primaryColor: lightModeButtonColor,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          foregroundColor: lightModeButtonColor,
+          backgroundColor: _customButtonColor,
+          foregroundColor: Colors.white,
         ),
       ),
-      buttonTheme: ButtonThemeData(
-        buttonColor: lightModeButtonColor,
-        textTheme: ButtonTextTheme.primary,
+      colorScheme: const ColorScheme.light().copyWith(
+        primary: Colors.white,
+        secondary: defaultLightButtonColor,
+        inversePrimary: _getContrastingTextColor(defaultLightButtonColor),
       ),
-      
     );
     notifyListeners();
   }
 
   void setDarkTheme() {
+    _customButtonColor = defaultDarkButtonColor;
     _currentTheme = ThemeData.dark().copyWith(
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: darkModeButtonColor,
-        ),
-      ),
-      primaryColor: darkModeButtonColor,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          foregroundColor: darkModeButtonColor,
-        ),
-      ),
-      buttonTheme: ButtonThemeData(
-        buttonColor: darkModeButtonColor,
-        textTheme: ButtonTextTheme.primary,
-      ),
-    );
-    notifyListeners();
-  }
-  void setCustomTheme(Color primaryColor) {
-    Color invertColor = _invertColor(primaryColor);
-    Color textColor = primaryColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
-    _currentTheme = ThemeData(
-      primaryColor: textColor,
-      
-      buttonTheme: ButtonThemeData(
-        buttonColor: primaryColor,
-        textTheme: ButtonTextTheme.primary,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryColor,
-          foregroundColor: textColor,
-        ),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: textColor,
+          backgroundColor: _customButtonColor,
+          foregroundColor: Colors.black,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: primaryColor,
+          foregroundColor: Colors.black,
         ),
       ),
-      // scaffoldBackgroundColor: textColor,
+      primaryColor: Colors.black,
+      colorScheme: const ColorScheme.light().copyWith(
+        primary: Colors.black,
+        secondary: defaultDarkButtonColor,
+        inversePrimary: _getContrastingTextColor(defaultDarkButtonColor),
+      ),
     );
     notifyListeners();
   }
 
-  Color _invertColor(Color color) {
-    return Color.fromARGB(
-      255,
-      255 - color.red,
-      255 - color.green,
-      255 - color.blue,
-    );
+  Color _getContrastingTextColor(Color color) {
+    return color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
   }
 }
