@@ -101,6 +101,7 @@ void main() {
       MaterialApp(
         home: Scaffold(
           body: CustomButton(
+            key: Key('custom_button_with_shadow'), // Add a unique key
             onClick: onClick,
             heroTag: heroTag,
             shadowPainter: shadowPainter,
@@ -110,6 +111,14 @@ void main() {
     );
 
     // Assert
-    expect(find.byType(CustomPaint), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byKey(Key('custom_button_with_shadow')),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is CustomPaint && widget.painter == shadowPainter,
+        ),
+      ),
+      findsOneWidget,
+    );
   });
 }
