@@ -8,6 +8,8 @@ import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/widgets/timer.dart';
 import 'package:sport60/widgets/stopwatch.dart';
 import 'package:sport60/views/dashboard/detail.dart';
+import 'package:provider/provider.dart';
+import 'package:sport60/widgets/theme.dart';
 
 class InProgressSession extends StatefulWidget {
   final int sessionId;
@@ -144,6 +146,8 @@ class _InProgressSessionState extends State<InProgressSession> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     if (_session == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -162,6 +166,9 @@ class _InProgressSessionState extends State<InProgressSession> {
                     _isStrarted = true;
                   });
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: themeNotifier.customButtonColor,
+                ),
                 child: const Text('Démarrer'),
               ),
             ],
@@ -180,7 +187,17 @@ class _InProgressSessionState extends State<InProgressSession> {
               const Text('Séance terminée'),
               if(_session!.sessionTypeId == 1)
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Combien de série avez vous réalisé?'),
+                  decoration: InputDecoration(
+                    labelText: 'Combien de série avez vous réalisé?',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: themeNotifier.currentTheme.colorScheme.secondary,
+                      ),
+                    ),
+                    labelStyle: TextStyle(
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                    ),
+                  ),
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
                     setState(() {
@@ -216,6 +233,7 @@ class _InProgressSessionState extends State<InProgressSession> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Séance en cours'),
+        backgroundColor: themeNotifier.currentTheme.primaryColor,
       ),
       body: _session == null
           ? const Center(child: CircularProgressIndicator())

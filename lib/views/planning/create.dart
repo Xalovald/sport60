@@ -81,6 +81,7 @@ class _PlanningCreateState extends State<PlanningCreate> {
       appBar: AppBar(
         title: const Text("Plannification"),
         backgroundColor: themeNotifier.currentTheme.primaryColor,
+        foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -154,6 +155,9 @@ class _PlanningCreateState extends State<PlanningCreate> {
                           Icons.calendar_today,
                           color: themeNotifier.currentTheme.iconTheme.color,
                         ),
+                        labelStyle: TextStyle(
+                          color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                        ),
                       ),
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
@@ -193,6 +197,9 @@ class _PlanningCreateState extends State<PlanningCreate> {
                           Icons.access_time,
                           color: themeNotifier.currentTheme.iconTheme.color,
                         ),
+                        labelStyle: TextStyle(
+                          color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                        ),
                       ),
                       onTap: () async {
                         TimeOfDay? pickedTime = await showTimePicker(
@@ -226,8 +233,8 @@ class _PlanningCreateState extends State<PlanningCreate> {
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(20),
-                        gradient: const LinearGradient(
-                          colors: [Colors.deepPurple, Colors.purpleAccent],
+                        gradient: LinearGradient(
+                          colors: [themeNotifier.customButtonColor, Colors.purpleAccent],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),

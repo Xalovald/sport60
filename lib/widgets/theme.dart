@@ -13,6 +13,7 @@ class ThemeNotifier extends ChangeNotifier {
   }
 
   ThemeData get currentTheme => _currentTheme;
+  Color get customButtonColor => _customButtonColor;
 
   void setLightTheme() async {
     _customButtonColor = defaultLightButtonColor;

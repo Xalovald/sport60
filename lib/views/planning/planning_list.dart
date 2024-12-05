@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/services/planning_service.dart';
 import 'package:sport60/views/session/in_progress.dart';
 import 'package:sport60/widgets/button.dart';
+import 'package:sport60/widgets/theme.dart';
 
 class PlanningList extends StatefulWidget {
   const PlanningList({super.key});
@@ -30,6 +32,8 @@ class _PlanningListState extends State<PlanningList> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return Scaffold(
       body: _plannings.isEmpty
           ? const Center(child: Text("Aucun planning disponible.", style: TextStyle(fontSize: 18, color: Colors.grey)))
@@ -64,7 +68,7 @@ class _PlanningListState extends State<PlanningList> {
                       ),
                       trailing: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+                          backgroundColor: themeNotifier.customButtonColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),

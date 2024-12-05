@@ -40,20 +40,21 @@ class _ChooseSessionState extends State<ChooseSession> {
       appBar: AppBar(
         title: const Text("Choisir une séance"),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+        backgroundColor: themeNotifier.currentTheme.primaryColor,
+        foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
+            Text(
               "Sélectionnez ou ajoutez une séance",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
+                color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
               ),
             ),
             const SizedBox(height: 20),
@@ -62,13 +63,16 @@ class _ChooseSessionState extends State<ChooseSession> {
               decoration: BoxDecoration(
                 color: Colors.deepPurple.shade50,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.deepPurple, width: 2),
+                border: Border.all(color: themeNotifier.currentTheme.colorScheme.secondary, width: 2),
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<SessionDomain>(
-                  hint: const Text(
+                  hint: Text(
                     "Sélectionner une séance",
-                    style: TextStyle(fontSize: 16, color: Colors.black54),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                    ),
                   ),
                   value: _selectedSession,
                   onChanged: (SessionDomain? newValue) {
@@ -106,12 +110,15 @@ class _ChooseSessionState extends State<ChooseSession> {
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(20),
-                gradient: const LinearGradient(
-                  colors: [Colors.deepPurple, Colors.purpleAccent],
+                gradient: LinearGradient(
+                  colors: [themeNotifier.customButtonColor, Colors.purpleAccent],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                border: Border.all(
+                    color: themeNotifier.currentTheme.colorScheme.secondary,
+                    width: 2
+                    ),
               ),
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
