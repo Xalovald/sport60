@@ -70,9 +70,9 @@ class _CountdownTimerState extends State<CountdownTimer> {
       children: [
         Text(
           _remainingTime > 0
-              ? 'Temps restant: $_remainingTime secondes'
-              : 'Temps écoulé!',
-          style: TextStyle(fontSize: 24),
+              ? '$_remainingTime'
+              : '0',
+          style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 20),
         if (!_isStarted && !widget.autoStart)

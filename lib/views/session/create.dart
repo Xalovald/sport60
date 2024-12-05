@@ -478,7 +478,7 @@ class _CreateSessionState extends State<CreateSession> {
                   ),
                 ],
 
-                if(_sessionTypeId == 2) ...[
+                if(_sessionTypeId != 1) ...[
                   const SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
@@ -503,14 +503,14 @@ class _CreateSessionState extends State<CreateSession> {
                       });
                     },
                     validator: (value) {
-                      if (_sessionTypeId == 2 && (value == null || value.isEmpty)) {
+                      if (_sessionTypeId != 1 && (value == null || value.isEmpty)) {
                         return 'Veuillez renseigner le temps de pause entre les exercices';
                       }
                       return null;
                     },
                   ),
                 ],
-                if(_sessionTypeId != 1) ...[
+                if(_sessionTypeId == 2) ...[
                   const SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
@@ -535,7 +535,7 @@ class _CreateSessionState extends State<CreateSession> {
                       });
                     },
                     validator: (value) {
-                      if (_sessionTypeId != 1 && (value == null || value.isEmpty)) {
+                      if (_sessionTypeId == 2 && (value == null || value.isEmpty)) {
                         return 'Veuillez renseigner le temps de pause entre les séries';
                       }
                       return null;
