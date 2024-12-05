@@ -8,6 +8,7 @@ import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/widgets/timer.dart';
 import 'package:sport60/widgets/stopwatch.dart';
 import 'package:sport60/views/dashboard/detail.dart';
+import 'package:sport60/widgets/button.dart';
 
 class InProgressSession extends StatefulWidget {
   final int sessionId;
@@ -150,21 +151,65 @@ class _InProgressSessionState extends State<InProgressSession> {
 
     if (!_isStrarted) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Séance en cours')),
+        appBar: AppBar(
+          title: const Text('Création de la séance'),
+          backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+        ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Démarer la séance !'),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    _isStrarted = true;
-                  });
-                },
-                child: const Text('Démarrer'),
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Commencer votre séance ${_session!.name}',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Appuyez sur le bouton ci-dessous pour commencer !',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                CustomButton(
+                  onClick: () {
+                    setState(() {
+                      _isStrarted = true;
+                    });
+                  },
+                  heroTag: 'Start',
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: const LinearGradient(
+                      colors: [Colors.deepPurple, Colors.purpleAccent],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                  ),
+                  child: const Text(
+                    "Démarrer",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -172,36 +217,130 @@ class _InProgressSessionState extends State<InProgressSession> {
 
     if (_isSessionTerminate) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Séance en cours')),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Séance terminée'),
-              if(_session!.sessionTypeId == 1)
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Combien de série avez vous réalisé?'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      _nbSeriesRealised = int.tryParse(value) ?? 1;
-                    });
-                  },
-                ),
-              ElevatedButton(
-                onPressed: () async {
-                  await _updateSession();
+        appBar: AppBar(
+          title: const Text('Création de la séance'),
+          backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+        ),
+        // body: Center(
+        //   child: Column(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       const Text('Séance terminée'),
+        //       if(_session!.sessionTypeId == 1)
+        //         TextFormField(
+        //           decoration: const InputDecoration(labelText: 'Combien de série avez vous réalisé?'),
+        //           keyboardType: TextInputType.number,
+        //           onChanged: (value) {
+        //             setState(() {
+        //               _nbSeriesRealised = int.tryParse(value) ?? 1;
+        //             });
+        //           },
+        //         ),
+        //       ElevatedButton(
+        //         onPressed: () async {
+        //           await _updateSession();
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailDashboard(sessionId: _session!.id!),
+        //           Navigator.push(
+        //             context,
+        //             MaterialPageRoute(
+        //               builder: (context) => DetailDashboard(sessionId: _session!.id!),
+        //             ),
+        //           );
+        //         },
+        //         child: const Text('Voir le récap'),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Séance terminée ${_session!.name}',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                if(_session!.sessionTypeId == 1) ...[
+                  const Text(
+                    'Entrer votre nombre de série réalisé puis cliquer sur le bouton pour voir le récapitulatif de votre séance',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
                     ),
-                  );
-                },
-                child: const Text('Voir le récap'),
-              ),
-            ],
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: "Nombre de série réalisé ?",
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.numbers),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        _nbSeriesRealised = int.tryParse(value) ?? 1;
+                      });
+                    },
+                  ),
+                ] else ...[
+                  const Text(
+                    'Cliquer sur le bouton pour voir le récapitulatif de votre séance',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                
+                const SizedBox(height: 30),
+
+                CustomButton(
+                  onClick: () async {
+                    await _updateSession();
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailDashboard(sessionId: _session!.id!),
+                      ),
+                    );
+                  },
+                  heroTag: 'Recap',
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: const LinearGradient(
+                      colors: [Colors.deepPurple, Colors.purpleAccent],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                  ),
+                  child: const Text(
+                    "Voir le récap",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -215,120 +354,209 @@ class _InProgressSessionState extends State<InProgressSession> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Séance en cours'),
+        title: const Text('Création de la séance'),
+        backgroundColor: const Color.fromARGB(255, 194, 167, 240),
       ),
       body: _session == null
           ? const Center(child: CircularProgressIndicator())
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (_session!.sessionTypeId == 1) ...[
-                  CountdownTimer(
-                    maxTime: _session!.totalDuration,
-                    onTimeUp: () {
-                      _showSessionCompleteDialog();
-                      setState(() {
-                        _isSessionTerminate = true;
-                      });
-                    },
-                    autoStart: true,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    child: CountdownTimer(
+                      maxTime: _session!.totalDuration,
+                      onTimeUp: () {
+                        _showSessionCompleteDialog();
+                        setState(() {
+                          _isSessionTerminate = true;
+                        });
+                      },
+                      autoStart: true,
+                    ),
                   ),
                   const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("Effectuer autant de tours d'exercices que possible"),
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      "Effectuer autant de tours d'exercices que possible",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
+                  const SizedBox(height: 20),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: _sessionExercises.length,
-                      itemBuilder: (context, index) {
-                        final sessionExercise = _sessionExercises[index];
-                        return ListTile(
-                          title: Text("Exercice: ${sessionExercise.exerciseName}"),
-                          subtitle: Text("Nombre de répétitions: ${sessionExercise.repetitions}"),
-                        );
-                      },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      child: ListView.builder(
+                        itemCount: _sessionExercises.length,
+                        itemBuilder: (context, index) {
+                          final sessionExercise = _sessionExercises[index];
+                          return Card(
+                            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.blueAccent,
+                                child: Text(
+                                  '${index + 1}',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              title: Text(
+                                "Exercice: ${sessionExercise.exerciseName}",
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                "Nombre de répétitions: ${sessionExercise.repetitions}",
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ] else if (_session!.sessionTypeId == 2) ...[
-                    if (currentExercise != null)
-                      StopwatchWidget(
-                        key: _stopwatchKey, // Passez la clé au widget
-                        onStop: handleStopwatchStop,
-                        autoStart: true,
-                      ),
-                      Text(
-                        _isResting
-                            ? "Repos : ${_currentSeries == currentExercise!.series ? currentExercise.exercisePauseTime : currentExercise.seriePauseTime}s"
-                            : "Exercice : ${currentExercise!.exerciseName}",
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      const SizedBox(height: 20),
-                      if (_isResting) ...[
-                        CountdownTimer(
-                          key: ValueKey('pause-${_currentExerciseIndex}-${_currentSeries}'),
-                          // maxTime: currentExercise!.exercisePauseTime ?? 0,
-                          maxTime: _currentSeries == currentExercise!.series ? currentExercise.exercisePauseTime ?? 0 : currentExercise.seriePauseTime,
-                          onTimeUp: _startNextStep,
-                          autoStart: true,
-                        )
-                      ] else if (currentExercise != null && (currentExercise.repetitions ?? 0) > 0) ...[
-                        Text("Effectuer ${currentExercise.repetitions}"),
-                        ElevatedButton(
-                          onPressed: _startNextStep,
-                          child: Text('Terminé'),
-                        )
-                      ] else if (currentExercise != null && (currentExercise.duration ?? 0) > 0) ...[
-                        CountdownTimer(
-                          key: ValueKey('exercise-${_currentExerciseIndex}-${_currentSeries}'),
-                          maxTime: currentExercise.duration ?? 0,
-                          onTimeUp: _startNextStep,
+                  if (currentExercise != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        StopwatchWidget(
+                          key: _stopwatchKey,
+                          onStop: handleStopwatchStop,
                           autoStart: true,
                         ),
+
+                        const SizedBox(height: 150),
+                        
+                        Text(
+                          _isResting
+                              ? "Repos : ${_currentSeries == currentExercise.series ? currentExercise.exercisePauseTime : currentExercise.seriePauseTime}s"
+                              : "Exercice : ${currentExercise.exerciseName}",
+                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: _isResting ? Colors.green : Colors.blue,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10),
+                        
+                        if (_isResting) ...[
+                          CountdownTimer(
+                            key: ValueKey('pause-${_currentExerciseIndex}-${_currentSeries}'),
+                            maxTime: _currentSeries == currentExercise!.series
+                                ? currentExercise.exercisePauseTime ?? 0
+                                : currentExercise.seriePauseTime,
+                            onTimeUp: _startNextStep,
+                            autoStart: true,
+                          ),
+                        ] else if (currentExercise != null && (currentExercise.duration ?? 0) > 0) ...[
+                          CountdownTimer(
+                            key: ValueKey('exercise-${_currentExerciseIndex}-${_currentSeries}'),
+                            maxTime: currentExercise.duration ?? 0,
+                            onTimeUp: _startNextStep,
+                            autoStart: true,
+                          ),
+                        ],
+                        const SizedBox(height: 20),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "Série ${_currentSeries} / ${currentExercise!.series}",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                  ),
+                            ),
+                            Text(
+                              "Exercice ${_currentExerciseIndex + 1} / ${_sessionExercises.length}",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                  ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
                       ],
-                      const SizedBox(height: 20),
-                      Text(
-                        "Série ${_currentSeries} / ${currentExercise!.series}",
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      Text(
-                        "Exercice ${_currentExerciseIndex + 1} / ${_sessionExercises.length}",
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
+                    ),
                 ] else if (_session!.sessionTypeId == 3) ...[
                   if (currentExercise != null)
-                      StopwatchWidget(
-                        key: _stopwatchKey, // Passez la clé au widget
-                        onStop: handleStopwatchStop,
-                        autoStart: true,
-                      ),
-                      Text(
-                        _isResting
-                            ? "Repos : ${currentExercise!.seriePauseTime}s"
-                            : "Exercice : ${currentExercise!.exerciseName}, x${currentExercise.repetitions} reps",
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                    const SizedBox(height: 20),
-                    if (_isResting)
-                      CountdownTimer(
-                        key: ValueKey('serie-pause-${_currentExerciseIndex}-${_currentSeries}'),
-                        maxTime: currentExercise!.seriePauseTime,
-                        onTimeUp: _startNextStep,
-                        autoStart: true,
-                      )
-                    else
-                      CountdownTimer(
-                        key: ValueKey('exercise-${_currentExerciseIndex}-${_currentSeries}'),
-                        maxTime: 60,
-                        onTimeUp: _startNextStep,
-                        autoStart: true,
-                      ),
-                    const SizedBox(height: 20),
-                    Text(
-                      "Série ${_currentSeries} / ${currentExercise!.series}",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    Text(
-                      "Exercice ${_currentExerciseIndex + 1} / ${_sessionExercises.length}",
-                      style: Theme.of(context).textTheme.bodySmall,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        StopwatchWidget(
+                          key: _stopwatchKey,
+                          onStop: handleStopwatchStop,
+                          autoStart: true,
+                        ),
+
+                        const SizedBox(height: 150),
+                        
+                        Text(
+                          _isResting
+                              ? "Repos : ${_currentSeries == currentExercise.series ? currentExercise.exercisePauseTime : 0}s"
+                            : "Exercice : ${currentExercise.repetitions} ${currentExercise.exerciseName}",
+                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: _isResting ? Colors.green : Colors.blue,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10),
+                        
+                        if (_isResting) ...[
+                          CountdownTimer(
+                            key: ValueKey('pause-${_currentExerciseIndex}-${_currentSeries}'),
+                            maxTime: _currentSeries == currentExercise!.series
+                                ? currentExercise.exercisePauseTime ?? 0
+                                : 0,
+                            onTimeUp: _startNextStep,
+                            autoStart: true,
+                          ),
+                        ] else ...[
+                          CountdownTimer(
+                            key: ValueKey('exercise-${_currentExerciseIndex}-${_currentSeries}'),
+                            maxTime: 60,
+                            onTimeUp: _startNextStep,
+                            autoStart: true,
+                          ),
+                        ],
+                        const SizedBox(height: 20),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "Série ${_currentSeries} / ${currentExercise!.series}",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                  ),
+                            ),
+                            Text(
+                              "Exercice ${_currentExerciseIndex + 1} / ${_sessionExercises.length}",
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                  ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                      ],
                     ),
                 ]
               ],
