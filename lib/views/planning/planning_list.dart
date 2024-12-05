@@ -5,6 +5,7 @@ import 'package:sport60/services/planning_service.dart';
 import 'package:sport60/views/session/in_progress.dart';
 import 'package:sport60/widgets/button.dart';
 import 'package:sport60/widgets/theme.dart';
+import 'package:sport60/widgets/notification.dart';
 
 class PlanningList extends StatefulWidget {
   const PlanningList({super.key});
@@ -28,6 +29,9 @@ class _PlanningListState extends State<PlanningList> {
     setState(() {
       _plannings = plannings;
     });
+    if (mounted) {
+      await NotificationService().scheduleSessionNotifications(plannings);
+    }
   }
 
   bool _isDatePassed(String date) {
@@ -43,8 +47,13 @@ class _PlanningListState extends State<PlanningList> {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-
+    final String? payload = ModalRoute.of(context)?.settings.arguments as String?;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Liste des plannings'),
+        backgroundColor: themeNotifier.currentTheme.primaryColor,
+        foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
+      ),
       body: _plannings.isEmpty
           ? Center(child: Text("Aucun planning disponible.", style: TextStyle(fontSize: 18, color: themeNotifier.currentTheme.textTheme.bodyMedium?.color)))
           : ListView.builder(
