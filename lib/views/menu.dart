@@ -7,7 +7,6 @@ import 'package:sport60/widgets/notification.dart';
 import 'package:sport60/widgets/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

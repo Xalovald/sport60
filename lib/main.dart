@@ -6,7 +6,7 @@ import 'package:sport60/views/auth/auth_page.dart';
 import 'package:sport60/widgets/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sport60/views/home_screen.dart'; // Import HomeScreen
+import 'package:sport60/views/menu.dart'; // Import HomeScreen
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

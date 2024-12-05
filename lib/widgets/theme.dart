@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeNotifier extends ChangeNotifier {
   static const Color defaultLightButtonColor = Colors.blue;
@@ -8,12 +9,12 @@ class ThemeNotifier extends ChangeNotifier {
   Color _customButtonColor = defaultLightButtonColor;
 
   ThemeNotifier() {
-    setLightTheme(); // Thème clair par défaut
+    _loadThemePreference();
   }
 
   ThemeData get currentTheme => _currentTheme;
 
-  void setLightTheme() {
+  void setLightTheme() async {
     _customButtonColor = defaultLightButtonColor;
     _currentTheme = ThemeData.light().copyWith(
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -29,9 +30,10 @@ class ThemeNotifier extends ChangeNotifier {
       ),
     );
     notifyListeners();
+    await _saveThemePreference('light');
   }
 
-  void setDarkTheme() {
+  void setDarkTheme() async {
     _customButtonColor = defaultDarkButtonColor;
     _currentTheme = ThemeData.dark().copyWith(
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -53,6 +55,22 @@ class ThemeNotifier extends ChangeNotifier {
       ),
     );
     notifyListeners();
+    await _saveThemePreference('dark');
+  }
+
+  Future<void> _saveThemePreference(String theme) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('theme', theme);
+  }
+
+  Future<void> _loadThemePreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    final theme = prefs.getString('theme') ?? 'light';
+    if (theme == 'light') {
+      setLightTheme();
+    } else {
+      setDarkTheme();
+    }
   }
 
   Color _getContrastingTextColor(Color color) {
