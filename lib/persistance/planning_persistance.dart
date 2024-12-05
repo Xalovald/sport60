@@ -50,7 +50,7 @@ class PlanningPersistance {
       FROM planning
       INNER JOIN session ON planning.session_id = session.id
       WHERE planning.date_realized IS NOT NULL
-      ORDER BY planning.date DESC, planning.time DESC
+      ORDER BY planning.date_realized DESC, planning.time_realized DESC
     ''');
     return List.generate(maps.length, (i) {
       return PlanningDomain.fromMap(maps[i]);
