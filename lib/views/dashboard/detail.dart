@@ -9,8 +9,8 @@ import 'package:sport60/widgets/commentary.dart';
 import 'package:sport60/widgets/commentaryGet.dart';
 
 class DetailDashboard extends StatefulWidget {
-  final int sessionId;
-  const DetailDashboard({required this.sessionId, super.key});
+  final PlanningDomain history;
+  const DetailDashboard({required this.history, super.key});
 
   @override
   State<DetailDashboard> createState() => _DetailDashboardState();
@@ -19,38 +19,28 @@ class DetailDashboard extends StatefulWidget {
 class _DetailDashboardState extends State<DetailDashboard> {
   final SessionService _sessionService = SessionService();
   final SessionExerciseService _sessionExerciseService = SessionExerciseService();
-  final PlanningService _planningService = PlanningService();
 
   SessionDomain? _session;
   List<SessionExerciseDomain> _sessionExercises = [];
-  PlanningDomain? _planning;
 
   @override
   void initState() {
     super.initState();
     _loadSession();
     _loadSessionExercises();
-    _loadPlanning();
   }
 
   void _loadSession() async {
-    SessionDomain session = await _sessionService.getSessionById(widget.sessionId);
+    SessionDomain session = await _sessionService.getSessionById(widget.history.sessionId);
     setState(() {
       _session = session;
     });
   }
 
   void _loadSessionExercises() async {
-    List<SessionExerciseDomain> sessionExercises = await _sessionExerciseService.getSessionExercisesBySessionId(widget.sessionId);
+    List<SessionExerciseDomain> sessionExercises = await _sessionExerciseService.getSessionExercisesBySessionId(widget.history.sessionId);
     setState(() {
       _sessionExercises = sessionExercises;
-    });
-  }
-
-  void _loadPlanning() async {
-    PlanningDomain planning = await _planningService.getPlanningBySessionId(widget.sessionId);
-    setState(() {
-      _planning = planning;
     });
   }
 
@@ -103,7 +93,7 @@ class _DetailDashboardState extends State<DetailDashboard> {
           ),
         ),
         const SizedBox(height: 10),
-        Text('Réalisé le : ${_planning!.dateRealized} à ${_planning!.timeRealized}'),
+        Text('Réalisé le : ${widget.history.dateRealized} à ${widget.history.timeRealized}'),
         Text('Durée totale : ${_session!.totalDuration} secondes'),
       ],
     );

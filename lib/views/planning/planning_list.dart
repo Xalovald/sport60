@@ -91,7 +91,7 @@ class _PlanningListState extends State<PlanningList> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  InProgressSession(sessionId: planning.sessionId),
+                                  InProgressSession(planning: planning),
                             ),
                           );
                         },

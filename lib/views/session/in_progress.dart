@@ -13,9 +13,9 @@ import 'package:sport60/widgets/theme.dart';
 import 'package:sport60/widgets/button.dart';
 
 class InProgressSession extends StatefulWidget {
-  final int sessionId;
+  final PlanningDomain planning;
 
-  const InProgressSession({required this.sessionId, super.key});
+  const InProgressSession({required this.planning, super.key});
 
   @override
   State<InProgressSession> createState() => _InProgressSessionState();
@@ -30,6 +30,7 @@ class _InProgressSessionState extends State<InProgressSession> {
   final PlanningService _planningService = PlanningService();
 
   SessionDomain? _session;
+  PlanningDomain? _plannings;
   List<SessionExerciseDomain> _sessionExercises = [];
   int _currentExerciseIndex = 0;
   int _currentSeries = 1;
@@ -47,14 +48,14 @@ class _InProgressSessionState extends State<InProgressSession> {
   }
 
   void _loadSession() async {
-    SessionDomain session = await _sessionService.getSessionById(widget.sessionId);
+    SessionDomain session = await _sessionService.getSessionById(widget.planning.sessionId);
     setState(() {
       _session = session;
     });
   }
 
   void _loadSessionExercises() async {
-    List<SessionExerciseDomain> sessionExercises = await _sessionExerciseService.getSessionExercisesBySessionId(widget.sessionId);
+    List<SessionExerciseDomain> sessionExercises = await _sessionExerciseService.getSessionExercisesBySessionId(widget.planning.sessionId);
     setState(() {
       _sessionExercises = sessionExercises;
     });
@@ -83,35 +84,38 @@ class _InProgressSessionState extends State<InProgressSession> {
           return;
         }
       } else {
-        // Passer à la série suivante
         setState(() {
           _currentSeries++;
         });
       }
     } else {
-      // Transition vers la phase de repos
       setState(() {
         _isResting = true;
       });
     }
   }
 
-  Future<void> _updateSession() async {
-    PlanningDomain planning = await _planningService.getPlanningBySessionId(widget.sessionId);
-    DateTime now = DateTime.now(); // Récupère la date et l'heure actuelles
-
-    planning.dateRealized = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
-    planning.timeRealized = "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
-
-    await _planningService.updatePlanning(planning);
-
+  Future<void> _updateSessionExercises() async {
     if(_session!.sessionTypeId == 1){
       for (var sessionExercise in _sessionExercises) {
         sessionExercise.series = _nbSeriesRealised; 
         await _sessionExerciseService.updateSessionExercise(sessionExercise);
       }
     }
-    else{
+  }
+
+  void _showSessionCompleteDialog() async {
+    PlanningDomain planning = await _planningService.getPlanningById(widget.planning.id!);
+    DateTime now = DateTime.now(); 
+
+    planning.dateRealized = "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
+    planning.timeRealized = "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
+
+    await _planningService.updatePlanning(planning);
+
+    _plannings = await _planningService.getPlanningById(widget.planning.id!);
+
+    if(_session!.sessionTypeId != 1){
       final session = SessionDomain(
         id: _session!.id,
         name: _session!.name,
@@ -121,9 +125,7 @@ class _InProgressSessionState extends State<InProgressSession> {
       );
       await _sessionService.updateSession(session);
     }
-  }
 
-  void _showSessionCompleteDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -290,12 +292,12 @@ class _InProgressSessionState extends State<InProgressSession> {
 
                 CustomButton(
                   onClick: () async {
-                    await _updateSession();
+                    await _updateSessionExercises();
 
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailDashboard(sessionId: _session!.id!),
+                        builder: (context) => DetailDashboard(history: _plannings!),
                       ),
                     );
                   },

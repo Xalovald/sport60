@@ -9,6 +9,16 @@ class PlanningPersistance {
     return await db.insert('planning', plannification.toMap());
   }
 
+  Future<PlanningDomain> getPlanningById(int planningId) async {
+    final db = await _dbHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'planning',
+      where: 'id = ?',
+      whereArgs: [planningId],
+    );
+    return PlanningDomain.fromMap(maps.first);
+  }
+
   Future<PlanningDomain> getPlanningBySessionId(int sessionId) async {
     final db = await _dbHelper.database;
     final List<Map<String, dynamic>> maps = await db.query(

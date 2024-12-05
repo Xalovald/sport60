@@ -24,8 +24,6 @@ class _HistoryListState extends State<HistoryList> {
   // Charger les plannings depuis la base de données
   Future<void> _loadHistories() async {
     List<PlanningDomain> histories = await _planningService.getHistories();
-    print("oooooooooooooooooo");
-    print(histories.length);
     setState(() {
       _histories = histories;
     });
@@ -78,7 +76,7 @@ class _HistoryListState extends State<HistoryList> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  DetailDashboard(sessionId: history.sessionId),
+                                  DetailDashboard(history: history),
                             ),
                           );
                         },

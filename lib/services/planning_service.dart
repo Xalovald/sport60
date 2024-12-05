@@ -16,6 +16,10 @@ class PlanningService {
     return await _planningPersistance.getHistories();
   }
 
+  Future<PlanningDomain> getPlanningById(int planningId) async {
+    return await _planningPersistance.getPlanningById(planningId);
+  }
+
   Future<PlanningDomain> getPlanningBySessionId(int sessionId) async {
     return await _planningPersistance.getPlanningBySessionId(sessionId);
   }
