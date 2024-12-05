@@ -46,7 +46,7 @@ class _PlanningListState extends State<PlanningList> {
 
     return Scaffold(
       body: _plannings.isEmpty
-          ? const Center(child: Text("Aucun planning disponible.", style: TextStyle(fontSize: 18, color: Colors.grey)))
+          ? Center(child: Text("Aucun planning disponible.", style: TextStyle(fontSize: 18, color: themeNotifier.currentTheme.textTheme.bodyMedium?.color)))
           : ListView.builder(
               itemCount: _plannings.length,
               itemBuilder: (context, index) {
@@ -64,7 +64,7 @@ class _PlanningListState extends State<PlanningList> {
                         _isDatePassed(planning.date)
                           ? Icons.warning_amber_rounded
                           : Icons.event,
-                        color: Colors.purple,
+                        color: themeNotifier.customButtonColor,
                         size: 40,
                       ),
                       title: Text(

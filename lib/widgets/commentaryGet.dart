@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sport60/domain/comment_domain.dart';
 import 'package:sport60/services/comment_service.dart';
 import 'package:sport60/widgets/button.dart';
+import 'package:provider/provider.dart';
+import 'package:sport60/widgets/theme.dart';
 
 class CommentListWidget extends StatefulWidget {
   final int sessionId;
@@ -49,16 +51,17 @@ class _CommentListWidgetState extends State<CommentListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          const Text(
+          Text(
             "Commentaires",
             style: TextStyle(
               fontSize: 26, 
               fontWeight: FontWeight.bold,
-              color: Colors.black87, 
+              color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
             ),
           ),
 
@@ -81,14 +84,14 @@ class _CommentListWidgetState extends State<CommentListWidget> {
                   child: ListTile(
                     leading: Icon(
                       Icons.comment,
-                      color: Colors.purple.shade700,
+                      color: themeNotifier.currentTheme.iconTheme.color,
                     ),
                     title: Text(
                       comment.comment,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold, 
-                        color: Colors.black87,
+                        color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                       ),
                     ),
                   ),
@@ -109,13 +112,13 @@ class _CommentListWidgetState extends State<CommentListWidget> {
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(20),
-              color: Colors.purple,
-              border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+              color: themeNotifier.currentTheme.colorScheme.secondary,
+              border: Border.all(color: themeNotifier.customButtonColor, width: 2),
             ),
-            child: const Text(
+            child: Text(
               "Rafraîchir",
               style: TextStyle(
-                color: Colors.white,
+                color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
