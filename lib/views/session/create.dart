@@ -489,6 +489,7 @@ class _CreateSessionState extends State<CreateSession> {
                       style: TextStyle(color: Colors.grey))
                   : ListView.builder(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: _sessionExercises.length,
                       itemBuilder: (context, index) {
                         return Card(

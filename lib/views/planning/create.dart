@@ -6,7 +6,8 @@ import 'package:sport60/domain/session_domain.dart';
 import 'package:sport60/domain/session_exercise_domain.dart';
 import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/views/planning/planning_list.dart';
-import 'package:sport60/widgets/button.dart'; // Import du bouton personnalisé
+import 'package:sport60/widgets/button.dart';
+import 'package:sport60/widgets/commentaryGet.dart';
 
 class PlanningCreate extends StatefulWidget {
   final SessionDomain session;
@@ -80,7 +81,7 @@ class _PlanningCreateState extends State<PlanningCreate> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // Permet de défiler en cas de contenu long
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -106,6 +107,7 @@ class _PlanningCreateState extends State<PlanningCreate> {
                       style: TextStyle(color: Colors.grey))
                   : ListView.builder(
                       shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: _sessionExercises.length,
                       itemBuilder: (context, index) {
                         return Card(
@@ -223,6 +225,11 @@ class _PlanningCreateState extends State<PlanningCreate> {
                           fontSize: 16,
                         ),
                       ),
+                    ),
+
+                    const SizedBox(height: 50),
+                    CommentListWidget(
+                      sessionId: widget.session.id!,
                     ),
                   ],
                 ),

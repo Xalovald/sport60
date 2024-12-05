@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sport60/domain/comment_domain.dart';
 import 'package:sport60/services/comment_service.dart';
-import 'dart:io';
+import 'package:sport60/widgets/button.dart';
 
 class CommentWidget extends StatefulWidget {
   final int sessionId;
@@ -43,7 +42,7 @@ class _CommentWidgetState extends State<CommentWidget> {
         sessionId: widget.sessionId,
         exerciseId: widget.exerciseId,
         comment: commentText,
-        isGlobal: false,
+        isGlobal: widget.exerciseId == null ? true : false,
       );
       int commentId = await _commentService.addComment(comment);
       if (commentId != null) {
@@ -98,38 +97,66 @@ class _CommentWidgetState extends State<CommentWidget> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
+@override
+Widget build(BuildContext context) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
         children: [
-          TextField(
-            controller: _commentController,
-            decoration: InputDecoration(
-              labelText: 'Écrire un commentaire',
-              border: OutlineInputBorder(),
+          Expanded(
+            child: TextFormField(
+              decoration: const InputDecoration(
+                labelText: "Écrire un commentaire",
+                border: OutlineInputBorder(),
+                suffixIcon: Icon(Icons.comment),
+              ),
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
+              maxLines: null,
+              controller: _commentController,
             ),
           ),
-          SizedBox(height: 16.0),
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(_isRecording ? Icons.stop : Icons.mic),
-                onPressed: _isRecording ? _stopRecording : _startRecording,
-              ),
-              Text(_isRecording ? 'Enregistrement...' : 'Enregistrer un audio'),
-            ],
-          ),
-          SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: _addComment,
-            child: Text('Envoyer'),
+          const SizedBox(width: 2.0),
+          IconButton(
+            icon: Icon(
+              _isRecording ? Icons.stop : Icons.mic,
+              color: _isRecording ? Colors.red : Colors.deepPurple,
+              size: 35,
+            ),
+            onPressed: _isRecording ? _stopRecording : _startRecording,
+            tooltip: _isRecording ? "Arrêter l'enregistrement" : "Commencer l'enregistrement",
           ),
         ],
       ),
-    );
-  }
+
+      const SizedBox(height: 16.0),
+      Center(
+        child: CustomButton(
+          onClick: _addComment,
+          heroTag: 'Send',
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: 35,
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.purple,
+            border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+          ),
+          child: const Text(
+            "Envoyer",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
 
   @override
   void dispose() {
