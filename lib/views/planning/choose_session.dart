@@ -4,6 +4,9 @@ import 'package:sport60/domain/session_domain.dart';
 import 'package:sport60/views/planning/create.dart';
 import 'package:sport60/views/session/create.dart';
 import 'package:sport60/widgets/button.dart';
+import 'package:sport60/widgets/sound.dart';
+import 'package:sport60/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class ChooseSession extends StatefulWidget {
   const ChooseSession({super.key});
@@ -32,39 +35,44 @@ class _ChooseSessionState extends State<ChooseSession> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Choisir une séance"),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+        backgroundColor: themeNotifier.currentTheme.primaryColor,
+        foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
+            Text(
               "Sélectionnez ou ajoutez une séance",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
+                color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
               ),
             ),
             const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.deepPurple.shade50,
+                color: themeNotifier.currentTheme.colorScheme.tertiary,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.deepPurple, width: 2),
+                border: Border.all(color: themeNotifier.currentTheme.colorScheme.secondary, width: 2),
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<SessionDomain>(
-                  hint: const Text(
+                  hint: Text(
                     "Sélectionner une séance",
-                    style: TextStyle(fontSize: 16, color: Colors.black54),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                    ),
                   ),
                   value: _selectedSession,
                   onChanged: (SessionDomain? newValue) {
@@ -85,7 +93,11 @@ class _ChooseSessionState extends State<ChooseSession> {
                       value: session,
                       child: Text(
                         session.name,
-                        style: const TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                        ),
+                        selectionColor: themeNotifier.currentTheme.colorScheme.primary,
                       ),
                     );
                   }).toList(),
@@ -102,20 +114,23 @@ class _ChooseSessionState extends State<ChooseSession> {
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(20),
-                gradient: const LinearGradient(
-                  colors: [Colors.deepPurple, Colors.purpleAccent],
+                gradient: LinearGradient(
+                  colors: [themeNotifier.customButtonColor, Colors.purpleAccent],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                border: Border.all(
+                    color: themeNotifier.currentTheme.colorScheme.secondary,
+                    width: 2
+                    ),
               ),
               width: MediaQuery.of(context).size.width * 0.8,
               height: 50,
               heroTag: 'CreateSession',
-              child: const Text(
+              child: Text(
                 "Ajouter une séance",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),

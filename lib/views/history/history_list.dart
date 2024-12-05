@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sport60/widgets/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/services/planning_service.dart';
 import 'package:sport60/views/dashboard/detail.dart';
@@ -29,6 +31,7 @@ class _HistoryListState extends State<HistoryList> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
       body: _histories.isEmpty
           ? const Center(child: Text("Aucune séance disponible.", style: TextStyle(fontSize: 18, color: Colors.grey)))
