@@ -5,6 +5,8 @@ import 'package:sport60/domain/session_domain.dart';
 import 'package:sport60/domain/session_exercise_domain.dart';
 import 'package:sport60/services/planning_service.dart';
 import 'package:sport60/domain/planning_domain.dart';
+import 'package:sport60/widgets/commentary.dart';
+import 'package:sport60/widgets/commentaryGet.dart';
 
 class DetailDashboard extends StatefulWidget {
   final int sessionId;
@@ -52,7 +54,7 @@ class _DetailDashboardState extends State<DetailDashboard> {
     });
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -63,15 +65,28 @@ class _DetailDashboardState extends State<DetailDashboard> {
           ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildSessionDetails(),
-                  const SizedBox(height: 20),
-                  _buildSessionExercises(),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildSessionDetails(),
+                    const SizedBox(height: 20),
+                    _buildSessionExercises(),
+                    
+                    const SizedBox(height: 50),
+                    CommentListWidget(
+                      sessionId: _session!.id!,
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    CommentWidget(
+                      sessionId: _session!.id!,
+                    )
+                  ],
+                ),
               ),
-            ),
+            )
     );
   }
 
@@ -81,7 +96,11 @@ class _DetailDashboardState extends State<DetailDashboard> {
       children: [
         Text(
           _session!.name,
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: const TextStyle(
+            fontSize: 35, 
+            fontWeight: FontWeight.bold,
+            color: Colors.black87, 
+          ),
         ),
         const SizedBox(height: 10),
         Text('Réalisé le : ${_planning!.dateRealized} à ${_planning!.timeRealized}'),
@@ -95,33 +114,33 @@ class _DetailDashboardState extends State<DetailDashboard> {
       return const Center(child: Text('Aucun exercice dans cette session.'));
     }
 
-    return Expanded(
-      child: ListView.builder(
-        itemCount: _sessionExercises.length,
-        itemBuilder: (context, index) {
-          final exercise = _sessionExercises[index];
-          return Card(
-            elevation: 4,
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: ListTile(
-              title: Text(exercise.exerciseName ?? ""),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _session!.sessionTypeId == 1 ? 
-                      "Répétitions: ${_sessionExercises[index].repetitions}, séries: ${_sessionExercises[index].series}" 
-                    : _session!.sessionTypeId == 2 ?
-                      "Durée: ${_sessionExercises[index].duration} sec, séries: ${_sessionExercises[index].series}, pause entre exercices: ${_sessionExercises[index].exercisePauseTime}, pause entre séries ${_sessionExercises[index].seriePauseTime}"
-                    : 
-                      "Répétitions: ${_sessionExercises[index].repetitions}, séries: ${_sessionExercises[index].series}, pause entre séries: ${_sessionExercises[index].seriePauseTime}",
-                  ),
-                ],
-              ),
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: _sessionExercises.length,
+      itemBuilder: (context, index) {
+        final exercise = _sessionExercises[index];
+        return Card(
+          elevation: 4,
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: ListTile(
+            title: Text(exercise.exerciseName ?? ""),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _session!.sessionTypeId == 1 ? 
+                    "Répétitions: ${_sessionExercises[index].repetitions}, séries: ${_sessionExercises[index].series}" 
+                  : _session!.sessionTypeId == 2 ?
+                    "Durée: ${_sessionExercises[index].duration} sec, séries: ${_sessionExercises[index].series}, pause entre exercices: ${_sessionExercises[index].exercisePauseTime}, pause entre séries ${_sessionExercises[index].seriePauseTime}"
+                  : 
+                    "Répétitions: ${_sessionExercises[index].repetitions}, séries: ${_sessionExercises[index].series}, pause entre séries: ${_sessionExercises[index].seriePauseTime}",
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

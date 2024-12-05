@@ -30,6 +30,16 @@ class _PlanningListState extends State<PlanningList> {
     });
   }
 
+  bool _isDatePassed(String date) {
+    try {
+      final currentDate = DateTime.now();
+      final planningDate = DateTime.parse(date);
+      return planningDate.isBefore(currentDate);
+    } catch (e) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
@@ -50,14 +60,16 @@ class _PlanningListState extends State<PlanningList> {
                     ),
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16.0),
-                      leading: const Icon(
-                        Icons.event,
+                      leading: Icon(
+                        _isDatePassed(planning.date)
+                          ? Icons.warning_amber_rounded
+                          : Icons.event,
                         color: Colors.purple,
                         size: 40,
                       ),
                       title: Text(
                         planning.sessionName,
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
