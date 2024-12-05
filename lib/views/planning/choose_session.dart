@@ -61,7 +61,7 @@ class _ChooseSessionState extends State<ChooseSession> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.deepPurple.shade50,
+                color: themeNotifier.currentTheme.colorScheme.tertiary,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: themeNotifier.currentTheme.colorScheme.secondary, width: 2),
               ),
@@ -93,7 +93,11 @@ class _ChooseSessionState extends State<ChooseSession> {
                       value: session,
                       child: Text(
                         session.name,
-                        style: const TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                        ),
+                        selectionColor: themeNotifier.currentTheme.colorScheme.primary,
                       ),
                     );
                   }).toList(),

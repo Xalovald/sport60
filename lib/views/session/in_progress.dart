@@ -157,7 +157,8 @@ class _InProgressSessionState extends State<InProgressSession> {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Création de la séance'),
-          backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+          backgroundColor: themeNotifier.currentTheme.primaryColor,
+          foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
         ),
         body: Center(
           child: Padding(
@@ -168,18 +169,19 @@ class _InProgressSessionState extends State<InProgressSession> {
               children: [
                 Text(
                   'Commencer votre séance ${_session!.name}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   'Appuyez sur le bouton ci-dessous pour commencer !',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey,
+                    color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -196,17 +198,22 @@ class _InProgressSessionState extends State<InProgressSession> {
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(
-                      colors: [Colors.deepPurple, Colors.purpleAccent],
+                    gradient: LinearGradient(
+                      colors: [
+                        themeNotifier.customButtonColor,
+                        Colors.purpleAccent
+                      ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                    border: Border.all(
+                        color: themeNotifier.currentTheme.colorScheme.secondary,
+                        width: 2),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Démarrer",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -223,39 +230,9 @@ class _InProgressSessionState extends State<InProgressSession> {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Création de la séance'),
-          backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+          backgroundColor: themeNotifier.currentTheme.primaryColor,
+          foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
         ),
-        // body: Center(
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       const Text('Séance terminée'),
-        //       if(_session!.sessionTypeId == 1)
-        //         TextFormField(
-        //           decoration: const InputDecoration(labelText: 'Combien de série avez vous réalisé?'),
-        //           keyboardType: TextInputType.number,
-        //           onChanged: (value) {
-        //             setState(() {
-        //               _nbSeriesRealised = int.tryParse(value) ?? 1;
-        //             });
-        //           },
-        //         ),
-        //       ElevatedButton(
-        //         onPressed: () async {
-        //           await _updateSession();
-
-        //           Navigator.push(
-        //             context,
-        //             MaterialPageRoute(
-        //               builder: (context) => DetailDashboard(sessionId: _session!.id!),
-        //             ),
-        //           );
-        //         },
-        //         child: const Text('Voir le récap'),
-        //       ),
-        //     ],
-        //   ),
-        // ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -265,19 +242,20 @@ class _InProgressSessionState extends State<InProgressSession> {
               children: [
                 Text(
                   'Séance terminée ${_session!.name}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
                 if(_session!.sessionTypeId == 1) ...[
-                  const Text(
+                  Text(
                     'Entrer votre nombre de série réalisé puis cliquer sur le bouton pour voir le récapitulatif de votre séance',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -298,11 +276,11 @@ class _InProgressSessionState extends State<InProgressSession> {
                     },
                   ),
                 ] else ...[
-                  const Text(
+                  Text(
                     'Cliquer sur le bouton pour voir le récapitulatif de votre séance',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -327,17 +305,22 @@ class _InProgressSessionState extends State<InProgressSession> {
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(
-                      colors: [Colors.deepPurple, Colors.purpleAccent],
+                    gradient: LinearGradient(
+                      colors: [
+                        themeNotifier.customButtonColor,
+                        Colors.purpleAccent
+                      ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                    border: Border.all(
+                        color: themeNotifier.currentTheme.colorScheme.secondary,
+                        width: 2),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Voir le récap",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -359,7 +342,8 @@ class _InProgressSessionState extends State<InProgressSession> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Création de la séance'),
-        backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+        backgroundColor: themeNotifier.currentTheme.primaryColor,
+        foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
       ),
       body: _session == null
           ? const Center(child: CircularProgressIndicator())
@@ -380,14 +364,14 @@ class _InProgressSessionState extends State<InProgressSession> {
                       autoStart: true,
                     ),
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       "Effectuer autant de tours d'exercices que possible",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.grey,
+                        color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                       ),
                     ),
                   ),
@@ -395,8 +379,11 @@ class _InProgressSessionState extends State<InProgressSession> {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                        color: themeNotifier.currentTheme.colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                            color: themeNotifier.currentTheme.colorScheme.secondary,
+                            width: 2),
                       ),
                       child: ListView.builder(
                         itemCount: _sessionExercises.length,
@@ -409,18 +396,19 @@ class _InProgressSessionState extends State<InProgressSession> {
                             ),
                             child: ListTile(
                               leading: CircleAvatar(
-                                backgroundColor: Colors.blueAccent,
+                                backgroundColor: themeNotifier.currentTheme.colorScheme.secondary,
                                 child: Text(
                                   '${index + 1}',
-                                  style: const TextStyle(color: Colors.white),
+                                  style: TextStyle(color: themeNotifier.currentTheme.colorScheme.inversePrimary),
                                 ),
                               ),
                               title: Text(
                                 "Exercice: ${sessionExercise.exerciseName}",
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold, color: themeNotifier.currentTheme.textTheme.headlineSmall?.color),
                               ),
                               subtitle: Text(
                                 "Nombre de répétitions: ${sessionExercise.repetitions}",
+                                style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color),
                               ),
                             ),
                           );
@@ -480,14 +468,14 @@ class _InProgressSessionState extends State<InProgressSession> {
                               "Série ${_currentSeries} / ${currentExercise!.series}",
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontSize: 16,
-                                    color: Colors.grey[700],
+                                    color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                                   ),
                             ),
                             Text(
                               "Exercice ${_currentExerciseIndex + 1} / ${_sessionExercises.length}",
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontSize: 16,
-                                    color: Colors.grey[700],
+                                    color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                                   ),
                             ),
                           ],
@@ -547,14 +535,14 @@ class _InProgressSessionState extends State<InProgressSession> {
                               "Série ${_currentSeries} / ${currentExercise!.series}",
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontSize: 16,
-                                    color: Colors.grey[700],
+                                    color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                                   ),
                             ),
                             Text(
                               "Exercice ${_currentExerciseIndex + 1} / ${_sessionExercises.length}",
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontSize: 16,
-                                    color: Colors.grey[700],
+                                    color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                                   ),
                             ),
                           ],

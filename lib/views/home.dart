@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
-                color: themeNotifier.currentTheme.colorScheme.secondary,
+                color: themeNotifier.currentTheme.colorScheme.primary,
                 border: Border.all(width: 2)),
             width: MediaQuery.of(context).size.width * 0.8,
             height: 50,
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
               "Planifier une séance",
               style: TextStyle(
                 //apply cutom button color
-                color: themeNotifier.currentTheme.colorScheme.inversePrimary,
+                color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
               ),
             ),
           ),

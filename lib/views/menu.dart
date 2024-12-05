@@ -39,61 +39,62 @@ class _HomeScreenState extends State<HomeScreen> {
         foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
       ),
       drawer: Drawer(
+        backgroundColor: themeNotifier.currentTheme.primaryColor,
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: themeNotifier.currentTheme.primaryColor,
-              ),
-              child: Text(
-                'Actions',
-                style: TextStyle(
-                  color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
-                  fontSize: 24,
-                ),
-              ),
+        DrawerHeader(
+          decoration: BoxDecoration(
+            color: themeNotifier.currentTheme.primaryColor,
+          ),
+          child: Text(
+            'Actions',
+            style: TextStyle(
+              color: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
+              fontSize: 24,
             ),
-            ListTile(
-              leading: const Icon(Icons.notifications),
-              title: const Text('Show Notification with Delay'),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                _showNotificationWithDelay(context); // Call the notification function with a delay
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.add_alert),
-              title: const Text('Show Notification'),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                _showNotification(context); // Call the notification function
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.sunny),
-              title: const Text('Light Theme'),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                Provider.of<ThemeNotifier>(context, listen: false).setLightTheme();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.dark_mode),
-              title: const Text('Dark Theme'),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                Provider.of<ThemeNotifier>(context, listen: false).setDarkTheme();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.exit_to_app),
-              title: const Text('Disconnect'),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                _disconnect(); // Call the disconnect function
-              },
-            ),
+          ),
+        ),
+        ListTile(
+          leading: Icon(Icons.notifications, color: themeNotifier.currentTheme.iconTheme.color),
+          title: Text('Show Notification with Delay', style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color)),
+          onTap: () {
+            Navigator.pop(context); // Close the drawer
+            _showNotificationWithDelay(context); // Call the notification function with a delay
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.add_alert, color: themeNotifier.currentTheme.iconTheme.color),
+          title: Text('Show Notification', style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color)),
+          onTap: () {
+            Navigator.pop(context); // Close the drawer
+            _showNotification(context); // Call the notification function
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.sunny, color: themeNotifier.currentTheme.iconTheme.color),
+          title: Text('Light Theme', style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color)),
+          onTap: () {
+            Navigator.pop(context); // Close the drawer
+            Provider.of<ThemeNotifier>(context, listen: false).setLightTheme();
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.dark_mode, color: themeNotifier.currentTheme.iconTheme.color),
+          title: Text('Dark Theme', style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color)),
+          onTap: () {
+            Navigator.pop(context); // Close the drawer
+            Provider.of<ThemeNotifier>(context, listen: false).setDarkTheme();
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.exit_to_app, color: themeNotifier.currentTheme.iconTheme.color),
+          title: Text('Disconnect', style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color)),
+          onTap: () {
+            Navigator.pop(context); // Close the drawer
+            _disconnect(); // Call the disconnect function
+          },
+        ),
           ],
         ),
       ),

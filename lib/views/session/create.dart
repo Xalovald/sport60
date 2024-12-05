@@ -207,6 +207,7 @@ class _CreateSessionState extends State<CreateSession> {
       appBar: AppBar(
         title: const Text('Création de la séance'),
         backgroundColor: themeNotifier.currentTheme.primaryColor,
+        foregroundColor: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -223,7 +224,7 @@ class _CreateSessionState extends State<CreateSession> {
                     labelText: "Entrer un nom",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: themeNotifier.currentTheme.colorScheme.secondary,
+                        color: themeNotifier.customButtonColor,
                       ),
                     ),
                     suffixIcon: Icon(
@@ -292,7 +293,7 @@ class _CreateSessionState extends State<CreateSession> {
                       labelText: "Total duration (s)",
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: themeNotifier.currentTheme.colorScheme.secondary,
+                          color: themeNotifier.customButtonColor,
                         ),
                       ),
                       suffixIcon: Icon(
@@ -329,12 +330,12 @@ class _CreateSessionState extends State<CreateSession> {
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(20),
                     color: themeNotifier.customButtonColor,
-                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                    border: Border.all(color: themeNotifier.customButtonColor, width: 2),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Ajouter un exercice",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -348,7 +349,7 @@ class _CreateSessionState extends State<CreateSession> {
                     labelText: "Sélectionner un exercice'",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: themeNotifier.currentTheme.colorScheme.secondary,
+                        color: themeNotifier.customButtonColor,
                       ),
                     ),
                     suffixIcon: Icon(
@@ -386,7 +387,7 @@ class _CreateSessionState extends State<CreateSession> {
                       labelText: "Durée (s)",
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: themeNotifier.currentTheme.colorScheme.secondary,
+                          color: themeNotifier.customButtonColor,
                         ),
                       ),
                       suffixIcon: Icon(
@@ -419,7 +420,7 @@ class _CreateSessionState extends State<CreateSession> {
                       labelText: "Repetitions",
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: themeNotifier.currentTheme.colorScheme.secondary,
+                          color: themeNotifier.customButtonColor,
                         ),
                       ),
                       suffixIcon: Icon(
@@ -452,7 +453,7 @@ class _CreateSessionState extends State<CreateSession> {
                       labelText: "Series",
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: themeNotifier.currentTheme.colorScheme.secondary,
+                          color: themeNotifier.customButtonColor,
                         ),
                       ),
                       suffixIcon: Icon(
@@ -485,7 +486,7 @@ class _CreateSessionState extends State<CreateSession> {
                       labelText: "Pause entre exercices",
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: themeNotifier.currentTheme.colorScheme.secondary,
+                          color: themeNotifier.customButtonColor,
                         ),
                       ),
                       suffixIcon: Icon(
@@ -517,7 +518,7 @@ class _CreateSessionState extends State<CreateSession> {
                       labelText: "Pause entre séries",
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: themeNotifier.currentTheme.colorScheme.secondary,
+                          color: themeNotifier.customButtonColor,
                         ),
                       ),
                       suffixIcon: Icon(
@@ -554,12 +555,12 @@ class _CreateSessionState extends State<CreateSession> {
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(20),
                     color: themeNotifier.customButtonColor,
-                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                    border: Border.all(color: themeNotifier.customButtonColor, width: 2),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Ajouté l'exercice à la session",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -569,8 +570,8 @@ class _CreateSessionState extends State<CreateSession> {
                 const SizedBox(height: 20),
                 
                 _sessionExercises.isEmpty
-                  ? const Text("Aucun exercice sélectionné.",
-                      style: TextStyle(color: Colors.grey))
+                  ? Text("Aucun exercice sélectionné.",
+                      style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color),)
                   : ListView.builder(
                       shrinkWrap: true,
                       itemCount: _sessionExercises.length,
@@ -591,7 +592,7 @@ class _CreateSessionState extends State<CreateSession> {
                                "Durée: ${_sessionExercises[index].duration} sec, séries: ${_sessionExercises[index].series}, pause entre exercices: ${_sessionExercises[index].exercisePauseTime}, pause entre séries ${_sessionExercises[index].seriePauseTime}"
                               : 
                                 "Répétitions: ${_sessionExercises[index].repetitions}, séries: ${_sessionExercises[index].series}, pause entre séries: ${_sessionExercises[index].seriePauseTime}",
-                              style: const TextStyle(color: Colors.grey),
+                              style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color),
                             ),
                           ),
                         );
@@ -613,12 +614,12 @@ class _CreateSessionState extends State<CreateSession> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                    border: Border.all(color: themeNotifier.customButtonColor, width: 2),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Créer la séance",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),

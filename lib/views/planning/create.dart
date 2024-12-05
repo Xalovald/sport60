@@ -147,16 +147,16 @@ class _PlanningCreateState extends State<PlanningCreate> {
                       decoration: InputDecoration(
                         labelText: "Sélectionnez une date",
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: themeNotifier.currentTheme.colorScheme.secondary,
-                          ),
-                        ),
+                            borderSide: BorderSide(
+                          color: themeNotifier.currentTheme.colorScheme.secondary,
+                          style: BorderStyle.solid,
+                        )),
                         suffixIcon: Icon(
-                          Icons.calendar_today,
+                          Icons.access_time,
                           color: themeNotifier.currentTheme.iconTheme.color,
                         ),
                         labelStyle: TextStyle(
-                          color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                            color: themeNotifier.currentTheme.colorScheme.secondary
                         ),
                       ),
                       onTap: () async {
@@ -181,6 +181,9 @@ class _PlanningCreateState extends State<PlanningCreate> {
                             ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
                             : '',
                       ),
+                      style: TextStyle(
+                        color: themeNotifier.currentTheme.colorScheme.secondary
+                      ),
                     ),
                     const SizedBox(height: 20),
                     // Sélection de l'heure
@@ -191,14 +194,16 @@ class _PlanningCreateState extends State<PlanningCreate> {
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: themeNotifier.currentTheme.colorScheme.secondary,
-                          ),
+                            style: BorderStyle.solid,
+
+                          )
                         ),
                         suffixIcon: Icon(
                           Icons.access_time,
                           color: themeNotifier.currentTheme.iconTheme.color,
                         ),
                         labelStyle: TextStyle(
-                          color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                          color: themeNotifier.currentTheme.colorScheme.secondary
                         ),
                       ),
                       onTap: () async {
@@ -222,6 +227,9 @@ class _PlanningCreateState extends State<PlanningCreate> {
                         text: _selectedTime != null
                             ? _selectedTime!.format(context)
                             : '',
+                      ),
+                      style: TextStyle(
+                          color: themeNotifier.currentTheme.colorScheme.secondary
                       ),
                     ),
                     const SizedBox(height: 20),
