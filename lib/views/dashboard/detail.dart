@@ -7,6 +7,8 @@ import 'package:sport60/services/planning_service.dart';
 import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/widgets/commentary.dart';
 import 'package:sport60/widgets/commentaryGet.dart';
+import 'package:provider/provider.dart';
+import 'package:sport60/widgets/theme.dart';
 
 class DetailDashboard extends StatefulWidget {
   final PlanningDomain history;
@@ -46,10 +48,12 @@ class _DetailDashboardState extends State<DetailDashboard> {
 
     @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Détail de la Session"),
-        backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+        backgroundColor: themeNotifier.currentTheme.primaryColor,
+        foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
       ),
       body: _session == null
           ? const Center(child: CircularProgressIndicator())
@@ -81,15 +85,16 @@ class _DetailDashboardState extends State<DetailDashboard> {
   }
 
   Widget _buildSessionDetails() {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           _session!.name,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 35, 
             fontWeight: FontWeight.bold,
-            color: Colors.black87, 
+            color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
           ),
         ),
         const SizedBox(height: 10),

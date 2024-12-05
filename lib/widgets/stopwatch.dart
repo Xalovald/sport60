@@ -14,7 +14,6 @@ class StopwatchWidget extends StatefulWidget {
 class StopwatchWidgetState extends State<StopwatchWidget> {
   late Stopwatch _stopwatch;
   late Timer _timer;
-  //List<String> _savedTimes = [];
 
   @override
   void initState() {
@@ -32,10 +31,6 @@ class StopwatchWidgetState extends State<StopwatchWidget> {
     });
   }
 
-  // void _stopStopwatch() {
-  //   _stopwatch.stop();
-  //   _timer.cancel();
-  // }
   void stopStopwatch() {
     if (_stopwatch.isRunning) {
       _stopwatch.stop();
@@ -45,20 +40,6 @@ class StopwatchWidgetState extends State<StopwatchWidget> {
       }
     }
   }
-
-  // void _resetStopwatch() {
-  //   _stopwatch.reset();
-  //   setState(() {});
-  // }
-
-  // void _saveAndRestart() {
-  //   setState(() {
-  //     _savedTimes.add(_formatTime(_stopwatch.elapsedMilliseconds));
-  //   });
-
-  //   _resetStopwatch();
-  //   _startStopwatch();
-  // }
 
   String _formatTime(int milliseconds) {
     int hundreds = (milliseconds / 10).truncate();
@@ -87,18 +68,6 @@ class StopwatchWidgetState extends State<StopwatchWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // ElevatedButton(
-            //     onPressed: () {
-            //       setState(() {
-            //         if (_stopwatch.isRunning) {
-            //           _stopStopwatch();
-            //         } else {
-            //           _startStopwatch();
-            //         }
-            //       });
-            //     },
-            //     child: Text(_stopwatch.isRunning ? 'Arrêt' : 'Marche'),
-            //   ),
             if(!_stopwatch.isRunning)
               ElevatedButton(
                 onPressed: () {
@@ -108,26 +77,10 @@ class StopwatchWidgetState extends State<StopwatchWidget> {
                 },
                 child: const Text('Marche'),
               ),
-            //SizedBox(width: 20),
-            // ElevatedButton(
-            //   onPressed: _saveAndRestart,
-            //   child: Text('Suivant'),
-            // ),
           ],
         ),
-        // SizedBox(height: 20),
-        // Column(
-        //   crossAxisAlignment: CrossAxisAlignment.start,
-        //   children:
-        //       _savedTimes.map((time) => Text('- Drapeau: $time')).toList(),
-        // ),
       ],
     );
   }
 
-  // @override
-  // void dispose() {
-  //   _timer.cancel();
-  //   super.dispose();
-  // }
 }

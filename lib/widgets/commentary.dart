@@ -5,6 +5,8 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:sport60/domain/comment_domain.dart';
 import 'package:sport60/services/comment_service.dart';
 import 'package:sport60/widgets/button.dart';
+import 'package:provider/provider.dart';
+import 'package:sport60/widgets/theme.dart';
 
 class CommentWidget extends StatefulWidget {
   final int sessionId;
@@ -49,18 +51,18 @@ class _CommentWidgetState extends State<CommentWidget> {
         // Le commentaire a été ajouté avec succès
         _commentController.clear();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Commentaire ajouté avec succès!')),
+          const SnackBar(content: Text('Commentaire ajouté avec succès!')),
         );
       } else {
         // Gérer l'échec de l'ajout du commentaire
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Échec de l\'ajout du commentaire.')),
+          const SnackBar(content: Text('Échec de l\'ajout du commentaire.')),
         );
       }
     } else {
       // Gérer le cas où le champ de texte est vide
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Veuillez entrer un commentaire.')),
+        const SnackBar(content: Text('Veuillez entrer un commentaire.')),
       );
     }
   }
@@ -85,7 +87,7 @@ class _CommentWidgetState extends State<CommentWidget> {
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Permission de microphone refusée.')),
+        const SnackBar(content: Text('Permission de microphone refusée.')),
       );
     }
   }
@@ -99,6 +101,7 @@ class _CommentWidgetState extends State<CommentWidget> {
 
 @override
 Widget build(BuildContext context) {
+  final themeNotifier = Provider.of<ThemeNotifier>(context);
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -121,7 +124,7 @@ Widget build(BuildContext context) {
           IconButton(
             icon: Icon(
               _isRecording ? Icons.stop : Icons.mic,
-              color: _isRecording ? Colors.red : Colors.deepPurple,
+              color: _isRecording ? Colors.red : themeNotifier.currentTheme.iconTheme.color,
               size: 35,
             ),
             onPressed: _isRecording ? _stopRecording : _startRecording,
@@ -139,14 +142,16 @@ Widget build(BuildContext context) {
           height: 35,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.purple,
-            border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+              color: themeNotifier.currentTheme.colorScheme.tertiary,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                  color: themeNotifier.currentTheme.colorScheme.secondary,
+                  width: 2),
           ),
-          child: const Text(
+          child: Text(
             "Envoyer",
             style: TextStyle(
-              color: Colors.white,
+              color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),

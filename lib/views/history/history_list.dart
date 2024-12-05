@@ -5,6 +5,7 @@ import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/services/planning_service.dart';
 import 'package:sport60/views/dashboard/detail.dart';
 
+
 class HistoryList extends StatefulWidget {
   const HistoryList({super.key});
   @override
@@ -34,7 +35,7 @@ class _HistoryListState extends State<HistoryList> {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     return Scaffold(
       body: _histories.isEmpty
-          ? const Center(child: Text("Aucune séance disponible.", style: TextStyle(fontSize: 18, color: Colors.grey)))
+          ? Center(child: Text("Aucune séance disponible.", style: TextStyle(fontSize: 18, color: themeNotifier.currentTheme.textTheme.bodyMedium?.color)))
           : ListView.builder(
               itemCount: _histories.length,
               itemBuilder: (context, index) {
@@ -48,9 +49,9 @@ class _HistoryListState extends State<HistoryList> {
                     ),
                     child: ListTile(
                       contentPadding: const EdgeInsets.all(16.0),
-                      leading: const Icon(
+                      leading: Icon(
                         Icons.event,
-                        color: Colors.purple,
+                        color: themeNotifier.currentTheme.iconTheme.color,
                         size: 40,
                       ),
                       title: Text(
@@ -65,9 +66,9 @@ class _HistoryListState extends State<HistoryList> {
                       ),
                       trailing: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+                          backgroundColor: themeNotifier.customButtonColor,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         onPressed: () {
