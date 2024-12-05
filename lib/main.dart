@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sport60/firebase_options.dart';
 import 'package:sport60/views/home.dart';
-import 'package:sport60/views/history/history_list.dart';
-import 'package:sport60/views/planning/planning_list.dart';
-import 'package:sport60/widgets/notification.dart';
+import 'package:sport60/views/auth/auth_page.dart';
+import 'package:sport60/widgets/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sport60/views/auth/auth_page.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sport60/views/menu.dart'; // Import HomeScreen
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeNotifier(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,14 +26,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sport60',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: _getHomePage(),
-      routes: {
-        '/login': (context) => const AuthPage(),
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return MaterialApp(
+          title: 'Sport60',
+          theme: themeNotifier.currentTheme,
+          home: _getHomePage(),
+          routes: {
+            '/login': (context) => const AuthPage(),
+          },
+        );
       },
     );
   }
@@ -47,150 +53,5 @@ class MyApp extends StatelessWidget {
         }
       },
     );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 1;
-
-  final List<Widget> _pages = [
-    const HistoryList(),
-    const HomePage(),
-    const PlanningList(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sport60'),
-        /* actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              _showNotificationWithDelay(context);  // Appeler la fonction de notification avec un délai
-            }, // Utiliser le widget pour afficher une notification
-          ),
-          IconButton(
-            icon: const Icon(Icons.add_alert),
-            onPressed: () {
-              _showNotification(context);  // Appeler la fonction de notification avec un délai
-            }, // Utiliser le widget pour afficher une notification
-          ),
-        ], */
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Actions',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.notifications),
-              title: const Text('Show Notification with Delay'),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                _showNotificationWithDelay(
-                    context); // Call the notification function with a delay
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.add_alert),
-              title: const Text('Show Notification'),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                _showNotification(context); // Call the notification function
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.exit_to_app),
-              title: const Text('Disconnect'),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                _disconnect(); // Call the disconnect function
-              },
-            ),
-          ],
-        ),
-      ),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Historique',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Accueil',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Séances',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
-    );
-  }
-
-  // Afficher un SnackBar et déclencher la notification après un délai
-  void _showNotificationWithDelay(BuildContext context) {
-    // Afficher un SnackBar pour informer l'utilisateur
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Une notification apparaîtra dans 5 secondes.'),
-      ),
-    );
-
-    // Appeler le service de notification après 5 secondes
-    NotificationService().showNotification(
-      title: 'POC Notification avec time',
-      body: 'Ceci est personnalisée.',
-      delayInSeconds: 3,
-    );
-  }
-
-  // Déclencher la notification direct
-  void _showNotification(BuildContext context) {
-    // Appeler le service de notification après 5 secondes
-    NotificationService().showNotification(
-      title: 'POC Notification',
-      body: 'Ceci est une notification personnalisée sans time.',
-      delayInSeconds: 0,
-    );
-  }
-
-  void _disconnect() async {
-    await FirebaseAuth.instance.signOut();
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
-    //cancel timer
-
-    // Navigate to the login screen or show a message
-    Navigator.pushReplacementNamed(context, '/login');
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:sport60/services/session_exercise_service.dart';
 import 'package:sport60/services/planning_service.dart';
 import 'package:sport60/domain/session_domain.dart';
@@ -8,6 +9,7 @@ import 'package:sport60/domain/planning_domain.dart';
 import 'package:sport60/views/planning/planning_list.dart';
 import 'package:sport60/widgets/button.dart';
 import 'package:sport60/widgets/commentaryGet.dart';
+import 'package:sport60/widgets/theme.dart';
 
 class PlanningCreate extends StatefulWidget {
   final SessionDomain session;
@@ -74,10 +76,13 @@ class _PlanningCreateState extends State<PlanningCreate> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Plannification"),
-        backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+        backgroundColor: themeNotifier.currentTheme.primaryColor,
+        foregroundColor: themeNotifier.currentTheme.textTheme.headlineSmall?.color,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -141,10 +146,20 @@ class _PlanningCreateState extends State<PlanningCreate> {
                     // Sélection de la date
                     TextFormField(
                       readOnly: true,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: "Sélectionnez une date",
-                        border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.calendar_today),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: themeNotifier.currentTheme.colorScheme.secondary,
+                          style: BorderStyle.solid,
+                        )),
+                        suffixIcon: Icon(
+                          Icons.access_time,
+                          color: themeNotifier.currentTheme.iconTheme.color,
+                        ),
+                        labelStyle: TextStyle(
+                            color: themeNotifier.currentTheme.colorScheme.secondary
+                        ),
                       ),
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
@@ -168,15 +183,30 @@ class _PlanningCreateState extends State<PlanningCreate> {
                             ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
                             : '',
                       ),
+                      style: TextStyle(
+                        color: themeNotifier.currentTheme.colorScheme.secondary
+                      ),
                     ),
                     const SizedBox(height: 20),
                     // Sélection de l'heure
                     TextFormField(
                       readOnly: true,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: "Sélectionnez une heure",
-                        border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.access_time),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: themeNotifier.currentTheme.colorScheme.secondary,
+                            style: BorderStyle.solid,
+
+                          )
+                        ),
+                        suffixIcon: Icon(
+                          Icons.access_time,
+                          color: themeNotifier.currentTheme.iconTheme.color,
+                        ),
+                        labelStyle: TextStyle(
+                          color: themeNotifier.currentTheme.colorScheme.secondary
+                        ),
                       ),
                       onTap: () async {
                         TimeOfDay? pickedTime = await showTimePicker(
@@ -200,6 +230,9 @@ class _PlanningCreateState extends State<PlanningCreate> {
                             ? _selectedTime!.format(context)
                             : '',
                       ),
+                      style: TextStyle(
+                          color: themeNotifier.currentTheme.colorScheme.secondary
+                      ),
                     ),
                     const SizedBox(height: 20),
                     CustomButton(
@@ -210,8 +243,8 @@ class _PlanningCreateState extends State<PlanningCreate> {
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(20),
-                        gradient: const LinearGradient(
-                          colors: [Colors.deepPurple, Colors.purpleAccent],
+                        gradient: LinearGradient(
+                          colors: [themeNotifier.customButtonColor, Colors.purpleAccent],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),

@@ -9,6 +9,8 @@ import 'package:sport60/services/session_exercise_service.dart';
 import 'package:sport60/services/exercise_service.dart';
 import 'package:sport60/views/planning/choose_session.dart';
 import 'package:sport60/widgets/button.dart';
+import 'package:provider/provider.dart';
+import 'package:sport60/widgets/theme.dart';
 
 class CreateSession extends StatefulWidget {
   const CreateSession({super.key});
@@ -199,10 +201,13 @@ class _CreateSessionState extends State<CreateSession> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Création de la séance'),
-        backgroundColor: const Color.fromARGB(255, 194, 167, 240),
+        backgroundColor: themeNotifier.currentTheme.primaryColor,
+        foregroundColor: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -215,10 +220,20 @@ class _CreateSessionState extends State<CreateSession> {
                 const SizedBox(height: 20),
 
                 TextFormField(
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: "Entrer un nom",
-                    border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.fitness_center),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: themeNotifier.customButtonColor,
+                      ),
+                    ),
+                    suffixIcon: Icon(
+                      Icons.fitness_center,
+                      color: themeNotifier.currentTheme.iconTheme.color,
+                    ),
+                    labelStyle: TextStyle(
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -274,10 +289,20 @@ class _CreateSessionState extends State<CreateSession> {
                 if(_sessionTypeId == 1)...[
                   const SizedBox(height: 20),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Total duration (s)",
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.access_time),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: themeNotifier.customButtonColor,
+                        ),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.access_time,
+                        color: themeNotifier.currentTheme.iconTheme.color,
+                      ),
+                      labelStyle: TextStyle(
+                        color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
@@ -304,13 +329,13 @@ class _CreateSessionState extends State<CreateSession> {
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(20),
-                    color: Colors.purple,
-                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                    color: themeNotifier.customButtonColor,
+                    border: Border.all(color: themeNotifier.customButtonColor, width: 2),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Ajouter un exercice",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -320,10 +345,20 @@ class _CreateSessionState extends State<CreateSession> {
 
                 // Select exercise
                 DropdownButtonFormField<int>(
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: "Sélectionner un exercice'",
-                    border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.fitness_center),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: themeNotifier.customButtonColor,
+                      ),
+                    ),
+                    suffixIcon: Icon(
+                      Icons.fitness_center,
+                      color: themeNotifier.currentTheme.iconTheme.color,
+                    ),
+                    labelStyle: TextStyle(
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                    ),
                   ),
                   value: _selectedExerciseId,
                   items: _exercises
@@ -348,10 +383,20 @@ class _CreateSessionState extends State<CreateSession> {
                 if(_sessionTypeId == 2) ...[
                   const SizedBox(height: 20),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Durée (s)",
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.access_time),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: themeNotifier.customButtonColor,
+                        ),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.access_time,
+                        color: themeNotifier.currentTheme.iconTheme.color,
+                      ),
+                      labelStyle: TextStyle(
+                        color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
@@ -371,10 +416,20 @@ class _CreateSessionState extends State<CreateSession> {
                 if(_sessionTypeId != 2) ...[
                   const SizedBox(height: 20),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Repetitions",
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.repeat),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: themeNotifier.customButtonColor,
+                        ),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.repeat,
+                        color: themeNotifier.currentTheme.iconTheme.color,
+                      ),
+                      labelStyle: TextStyle(
+                        color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
@@ -394,10 +449,20 @@ class _CreateSessionState extends State<CreateSession> {
                 if(_sessionTypeId != 1) ...[
                   const SizedBox(height: 20),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Series",
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.numbers),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: themeNotifier.customButtonColor,
+                        ),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.numbers,
+                        color: themeNotifier.currentTheme.iconTheme.color,
+                      ),
+                      labelStyle: TextStyle(
+                        color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
@@ -417,10 +482,20 @@ class _CreateSessionState extends State<CreateSession> {
                 if(_sessionTypeId != 1) ...[
                   const SizedBox(height: 20),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Pause entre exercices",
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.access_time),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: themeNotifier.customButtonColor,
+                        ),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.access_time,
+                        color: themeNotifier.currentTheme.iconTheme.color,
+                      ),
+                      labelStyle: TextStyle(
+                        color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
@@ -439,10 +514,20 @@ class _CreateSessionState extends State<CreateSession> {
                 if(_sessionTypeId == 2) ...[
                   const SizedBox(height: 20),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Pause entre séries",
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.access_time),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: themeNotifier.customButtonColor,
+                        ),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.access_time,
+                        color: themeNotifier.currentTheme.iconTheme.color,
+                      ),
+                      labelStyle: TextStyle(
+                        color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
@@ -469,13 +554,13 @@ class _CreateSessionState extends State<CreateSession> {
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(20),
-                    color: Colors.purple,
-                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                    color: themeNotifier.customButtonColor,
+                    border: Border.all(color: themeNotifier.customButtonColor, width: 2),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Ajouté l'exercice à la session",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -485,8 +570,8 @@ class _CreateSessionState extends State<CreateSession> {
                 const SizedBox(height: 20),
                 
                 _sessionExercises.isEmpty
-                  ? const Text("Aucun exercice sélectionné.",
-                      style: TextStyle(color: Colors.grey))
+                  ? Text("Aucun exercice sélectionné.",
+                      style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color),)
                   : ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -508,7 +593,7 @@ class _CreateSessionState extends State<CreateSession> {
                                "Durée: ${_sessionExercises[index].duration} sec, séries: ${_sessionExercises[index].series}, pause entre exercices: ${_sessionExercises[index].exercisePauseTime}, pause entre séries ${_sessionExercises[index].seriePauseTime}"
                               : 
                                 "Répétitions: ${_sessionExercises[index].repetitions}, séries: ${_sessionExercises[index].series}, pause entre séries: ${_sessionExercises[index].seriePauseTime}",
-                              style: const TextStyle(color: Colors.grey),
+                              style: TextStyle(color: themeNotifier.currentTheme.textTheme.bodyMedium?.color),
                             ),
                           ),
                         );
@@ -525,17 +610,17 @@ class _CreateSessionState extends State<CreateSession> {
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(
-                      colors: [Colors.deepPurple, Colors.purpleAccent],
+                    gradient: LinearGradient(
+                      colors: [themeNotifier.customButtonColor, Colors.purpleAccent],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    border: Border.all(color: Colors.deepPurple.shade800, width: 2),
+                    border: Border.all(color: themeNotifier.customButtonColor, width: 2),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Créer la séance",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: themeNotifier.currentTheme.textTheme.bodyMedium?.color,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
