@@ -51,7 +51,7 @@ class _HistoryListState extends State<HistoryList> {
                       contentPadding: const EdgeInsets.all(16.0),
                       leading: Icon(
                         Icons.event,
-                        color: themeNotifier.currentTheme.iconTheme.color,
+                        color: themeNotifier.customButtonColor,
                         size: 40,
                       ),
                       title: Text(
